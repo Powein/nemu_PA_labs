@@ -239,6 +239,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  Log("Successfully make token, now evaluating");
   return eval((word_t) 0, (word_t) (nr_token - 1));
   // may check the validity of the tokens here
   

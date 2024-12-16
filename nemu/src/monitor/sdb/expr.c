@@ -287,7 +287,8 @@ bool check_parentheses(word_t p, word_t q) {
     last_status = left_count;
   }
 
-  if (become_zero_cnt == 1 && left_count == 0) {
+  if (become_zero_cnt == 1 && left_count == 0 
+  && tokens[p].type == TK_LEFT_P && tokens[q].type == TK_RIGHT_P) {
     return true;
   }
   else {

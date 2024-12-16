@@ -173,7 +173,8 @@ static bool make_token(char *e) {
             nr_token = nr_token + 1;
             break;
           }
-          default: TODO(); // panic
+          default: 
+            Log("default"); // panic
         }
 
         break;

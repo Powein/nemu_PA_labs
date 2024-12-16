@@ -19,14 +19,15 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-
+// encode for tokens
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
+  TK_NOTYPE = 256, TK_EQ = 254, TK_SUB = 253, 
+  TK_ADD = 252, TK_MUL = 251, TK_DIV = 250, 
+  TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247
   /* TODO: Add more token types */
-
 };
 
+// regex matching rules for tokens
 static struct rule {
   const char *regex;
   int token_type;
@@ -35,12 +36,18 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
+  // former means higher priority
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_ADD},         // plus
   {"==", TK_EQ},        // equal
+  {"\\-", TK_SUB}, // regex - token type
+  {"\\/", TK_DIV},
+  {"\\*", TK_MUL},
+  {"[0-9]+", TK_DECIMAL}, // regex - token type
+  {"\\(", TK_LEFT_P},// (
+  {"\\)", TK_RIGHT_P},// )
 };
-
+// len(rules)
 #define NR_REGEX ARRLEN(rules)
 
 static regex_t re[NR_REGEX] = {};
@@ -54,6 +61,8 @@ void init_regex() {
   int ret;
 
   for (i = 0; i < NR_REGEX; i ++) {
+    // usage: int regcomp(regex_t *restrict preg, const char *restrict regex,int cflags);
+    // this will compile the regex and store it in the re[i]
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
@@ -67,35 +76,104 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+// max length for tokens array
+// TODO: try to use this definition everywhere
+#define MAX_TOKENS 32
+#define TK_LEN 32
+static Token tokens[32] __attribute__((used)) = {}; // make gcc happy
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
-  int position = 0;
-  int i;
+  // this makes token from the input string `e`
+  int position = 0;// the position of the current character in the string
+  int i;// sth like c99 for loop
   regmatch_t pmatch;
 
-  nr_token = 0;
+  nr_token = 0; // stack top position
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
+        // matched successfully
+        char *substr_start = e + position; // where substr starts
         int substr_len = pmatch.rm_eo;
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
-
-        position += substr_len;
+        
+        position += substr_len;// skip to go to next token
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        assert(nr_token < MAX_TOKENS);
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_ADD: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          };
+          case TK_SUB: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          };
+          case TK_MUL: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_DIV: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_DECIMAL: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_EQ: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_NOTYPE: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_LEFT_P: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_RIGHT_P: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          default: TODO(); // panic
         }
 
         break;

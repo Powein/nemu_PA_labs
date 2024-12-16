@@ -56,6 +56,7 @@ static int cmd_q(char *args) {
 static int cmd_p(char *args) {
   bool suc = false;
   bool *success = & suc;
+  // word_t is just like uint (4 bytes)
   word_t val = expr(args, success);
   printf("%d\n", val);
   return 0;

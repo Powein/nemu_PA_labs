@@ -196,9 +196,33 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  Log("I am here");
+  panic("Fuck you!");
+  Log("I am here again");
   /* TODO: Insert codes to evaluate the expression. */
+  // evaluate that thing and return it
   // TODO();
 
   return 0;
 }
+
+// eval(p, q) {
+//   if (p > q) {
+//     panic("Invalid expression");
+//   }
+//   else if (p == q) {
+//     /* Single token.
+//      * For now this token should be a number.
+//      * Return the value of the number.
+//      */
+//   }
+//   else if (check_parentheses(p, q) == true) {
+//     /* The expression is surrounded by a matched pair of parentheses.
+//      * If that is the case, just throw away the parentheses.
+//      */
+//     return eval(p + 1, q - 1);
+//   }
+//   else {
+//     /* We should do more things here. */
+//   }
+// }

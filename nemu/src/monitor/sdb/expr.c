@@ -117,6 +117,21 @@ void init_regex() {
   }
 }
 
+// // check if close parenthesis is matched
+// static bool is_matched() {
+//   int i = 0;
+//   int cnt = 0;
+//   while (tokens[i] != '\0') {
+//     if (str[i] == '(') {
+//       cnt++;
+//     } else if (str[i] == ')') {
+//       cnt--;
+//     }
+//     i++;
+//   }
+//   return cnt == 0;
+// }
+
 // max length for tokens array
 // TODO: try to use this definition everywhere
 #define MAX_TOKENS 32
@@ -256,10 +271,28 @@ bool check_parentheses(word_t p, word_t q) {
    * If that is the case, return true.
    * Otherwise, return false.
    */
-  if (tokens[p].type != TK_LEFT_P || tokens[q].type != TK_RIGHT_P) {
+  word_t i;
+  int32_t left_count = 0;
+  int32_t last_status = left_count;
+  word_t become_zero_cnt = 0;
+  for (i = p; i <= q; i++) {
+    if (tokens[i].type == TK_LEFT_P) {
+      left_count ++;
+    } else if (tokens[i].type == TK_RIGHT_P) {
+      left_count --;
+    }
+    if (last_status > 0 && left_count == 0) {
+      become_zero_cnt ++;
+    }
+    last_status = left_count;
+  }
+
+  if (become_zero_cnt == 1 && left_count == 0) {
+    return true;
+  }
+  else {
     return false;
   }
-  return true;
 }
 
 word_t eval(word_t p, word_t q) {

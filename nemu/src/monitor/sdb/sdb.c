@@ -43,15 +43,22 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
-  cpu_exec(-1);
+  cpu_exec(-1);// = ffffffff;
   return 0;
 }
 
 
 static int cmd_q(char *args) {
-  panic("Fuck you!");
+  // panic("Fuck you!");
   return -1;
-  
+}
+
+static int cmd_p(char *args) {
+  bool suc = false;
+  bool *success = & suc;
+  word_t val = expr(args, success);
+  printf("%d\n", val);
+  return 0;
 }
 
 static int cmd_help(char *args);
@@ -64,13 +71,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "p", "Print the value of the expression", cmd_p },
   /* TODO: Add more commands */
 
 };
 
 #define NR_CMD ARRLEN(cmd_table)
-
 static int cmd_help(char *args) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");

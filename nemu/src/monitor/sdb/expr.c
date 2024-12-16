@@ -312,8 +312,9 @@ word_t eval(word_t p, word_t q) {
       if(flag > 0) {
         continue;
       }
-      if(lowest_priority > get_priority(tokens[i])) {
-        lowest_priority = get_priority(tokens[i]);
+      word_t current_priority = get_priority(tokens[i]);
+      if(lowest_priority > current_priority) {
+        lowest_priority = current_priority;
         master_position = i;
       }
       if (lowest_priority == 0) {

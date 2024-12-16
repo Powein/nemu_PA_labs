@@ -303,9 +303,11 @@ word_t eval(word_t p, word_t q) {
       }
       if(tokens[i].type == TK_LEFT_P) {
         flag = flag + 1;
+        continue;
       }
       if(tokens[i].type == TK_RIGHT_P) {
         flag = flag - 1;
+        continue;
       }
       if(flag > 0) {
         continue;

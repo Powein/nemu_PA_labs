@@ -276,6 +276,9 @@ bool check_parentheses(word_t p, word_t q) {
   int32_t last_status = left_count;
   word_t become_zero_cnt = 0;
   for (i = p; i <= q; i++) {
+    if(left_count < 0) {
+      panic("check_parentheses: left_count < 0");
+    }
     if (tokens[i].type == TK_LEFT_P) {
       left_count ++;
     } else if (tokens[i].type == TK_RIGHT_P) {
@@ -286,6 +289,7 @@ bool check_parentheses(word_t p, word_t q) {
     }
     last_status = left_count;
   }
+
 
   if (become_zero_cnt == 1 && left_count == 0 
   && tokens[p].type == TK_LEFT_P && tokens[q].type == TK_RIGHT_P) {
@@ -380,6 +384,9 @@ word_t eval(word_t p, word_t q) {
       }
       case TK_DIV:{
         Log("Opreator found %s", tokens[master_position].str);
+        if (right_half_val == 0) {
+          panic("Division by zero");
+        }
         return left_half_val / right_half_val;
       }
       default:

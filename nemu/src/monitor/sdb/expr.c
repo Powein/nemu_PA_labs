@@ -29,7 +29,12 @@ enum {
   /* TODO: Add more token types */
 };
 
-word_t get_priority(word_t token_type) {
+typedef struct token {
+  int type;
+  char str[32];
+} Token;
+
+word_t get_priority(Token token) {
   /* Get the priority of the operator.
    * The higher the priority, the lower the number.
    * For now, we only have two priorities: 0 and 1.
@@ -38,6 +43,7 @@ word_t get_priority(word_t token_type) {
    * -1 is for default and extras.
    */
   word_t pri = 0;
+  word_t token_type = token.type;
   switch (token_type) {
     case TK_MUL: {
       pri = 1;
@@ -59,7 +65,7 @@ word_t get_priority(word_t token_type) {
       pri = -1;
     }
   }
-  Log("Priority of %d is %d", token_type, pri);
+  Log("Priority of %s is %d", token.str, pri);
   return pri;
 }
 
@@ -110,11 +116,6 @@ void init_regex() {
     }
   }
 }
-
-typedef struct token {
-  int type;
-  char str[32];
-} Token;
 
 // max length for tokens array
 // TODO: try to use this definition everywhere
@@ -296,8 +297,8 @@ word_t eval(word_t p, word_t q) {
     // get the first lowest priority operator
     for (i = p; i < q + 1; i++)
     {
-      if(lowest_priority > get_priority(tokens[i].type)) {
-        lowest_priority = get_priority(tokens[i].type);
+      if(lowest_priority > get_priority(tokens[i])) {
+        lowest_priority = get_priority(tokens[i]);
         master_position = i;
       }
       if (lowest_priority == 0) {

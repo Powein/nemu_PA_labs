@@ -298,6 +298,9 @@ word_t eval(word_t p, word_t q) {
     word_t flag = 0;
     for (i = p; i < q + 1; i++)
     {
+      if(tokens[i].type == TK_NOTYPE) {
+        continue;
+      }
       if(tokens[i].type == TK_LEFT_P) {
         flag = flag + 1;
       }

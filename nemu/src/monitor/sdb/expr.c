@@ -267,6 +267,12 @@ word_t eval(word_t p, word_t q) {
    * q is included.
   */
   int i = 0;
+  if (tokens[p].type == TK_NOTYPE) {
+    return eval(p + 1, q);
+  }
+  if (tokens[q].type == TK_NOTYPE) {
+    return eval(p, q - 1);
+  }
   if (p > q) {
     Log("Invalid expression provided.");
     panic("Internal Wrong, Can not get the evaluation of the expression!");

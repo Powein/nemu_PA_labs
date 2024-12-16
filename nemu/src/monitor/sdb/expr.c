@@ -65,7 +65,7 @@ word_t get_priority(word_t token_type) {
 
 
 
-static word_t ret_value = 0;
+// static word_t ret_value = 0;
 
 // regex matching rules for tokens
 static struct rule {
@@ -230,23 +230,23 @@ static bool make_token(char *e) {
   return true;
 }
 
-
+word_t eval(word_t p, word_t q);
 word_t expr(char *e, bool *success) {
   // init the return val
-  ret_value = 0;
+
 
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-
+  return eval((word_t) 0, (word_t) (nr_token - 1));
   // may check the validity of the tokens here
   
   /* TODO: Insert codes to evaluate the expression. */
   // evaluate that thing and return it
   // TODO();
 
-  return 0;
+  // return 0;
 }
 
 bool check_parentheses(word_t p, word_t q) {

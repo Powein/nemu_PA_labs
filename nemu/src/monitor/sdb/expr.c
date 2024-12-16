@@ -20,12 +20,52 @@
  */
 #include <regex.h>
 // encode for tokens
+
 enum {
+  // higher means higher op priority
   TK_NOTYPE = 256, TK_EQ = 254, TK_SUB = 253, 
   TK_ADD = 252, TK_MUL = 251, TK_DIV = 250, 
   TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247
   /* TODO: Add more token types */
 };
+
+word_t get_priority(word_t token_type) {
+  /* Get the priority of the operator.
+   * The higher the priority, the lower the number.
+   * For now, we only have two priorities: 0 and 1.
+   * 0 is for + and -.
+   * 1 is for * and /.
+   * -1 is for default and extras.
+   */
+  word_t pri = 0;
+  switch (token_type) {
+    case TK_MUL: {
+      pri = 1;
+      break;
+    }
+    case TK_DIV: {
+      pri = 1;
+      break;
+    }
+    case TK_ADD: {
+      pri = 0;
+      break;
+    }
+    case TK_SUB: {
+      pri = 0;
+      break;
+    }
+    default: {
+      Log("Unexpected token type was encountered: %d", token_type);
+      pri = -1;
+    }
+  }
+  return pri;
+}
+
+
+
+static word_t ret_value = 0;
 
 // regex matching rules for tokens
 static struct rule {
@@ -192,13 +232,16 @@ static bool make_token(char *e) {
 
 
 word_t expr(char *e, bool *success) {
+  // init the return val
+  ret_value = 0;
+
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-  Log("I am here");
-  panic("Fuck you!");
-  Log("I am here again");
+
+  // may check the validity of the tokens here
+  
   /* TODO: Insert codes to evaluate the expression. */
   // evaluate that thing and return it
   // TODO();
@@ -206,23 +249,85 @@ word_t expr(char *e, bool *success) {
   return 0;
 }
 
-// eval(p, q) {
-//   if (p > q) {
-//     panic("Invalid expression");
-//   }
-//   else if (p == q) {
-//     /* Single token.
-//      * For now this token should be a number.
-//      * Return the value of the number.
-//      */
-//   }
-//   else if (check_parentheses(p, q) == true) {
-//     /* The expression is surrounded by a matched pair of parentheses.
-//      * If that is the case, just throw away the parentheses.
-//      */
-//     return eval(p + 1, q - 1);
-//   }
-//   else {
-//     /* We should do more things here. */
-//   }
-// }
+bool check_parentheses(word_t p, word_t q) {
+  /* Check if the expression is surrounded by a matched pair of parentheses.
+   * If that is the case, return true.
+   * Otherwise, return false.
+   */
+  if (tokens[p].type != TK_LEFT_P || tokens[q].type != TK_RIGHT_P) {
+    return false;
+  }
+  return true;
+}
+
+word_t eval(word_t p, word_t q) {
+  /* Get the evaluation of the expression from p to q.
+   * q is included.
+  */
+  int i = 0;
+  if (p > q) {
+    Log("Invalid expression provided.");
+    panic("Internal Wrong, Can not get the evaluation of the expression!");
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+
+    // this is only for decimal currently
+    wchar_t r = strtoul(tokens[p].str, NULL, 10);
+    return r;
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }
+  else {
+    /* We should do more things here. */
+
+    // get the master operator, which is the one with the lowest priority
+
+    word_t lowest_priority = INT32_MAX;
+    word_t master_position = -1;
+    // get the first lowest priority operator
+    for (i = p; i < q + 1; i++)
+    {
+      if(lowest_priority > get_priority(tokens[i].type)) {
+        lowest_priority = get_priority(tokens[i].type);
+        master_position = i;
+      }
+      if (lowest_priority == 0) {
+        break;// that's what we want, stop
+      }
+    }
+    // leftpart and rightpart, eval them
+    word_t left_half_val = eval(p, master_position - 1);
+    word_t right_half_val = eval(master_position + 1, q);
+    switch (tokens[master_position].type) {
+      case TK_ADD:{
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val + right_half_val;
+      };
+      case TK_SUB:{
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val - right_half_val;
+      }
+      case TK_MUL:{
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val * right_half_val;
+      }
+      case TK_DIV:{
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val / right_half_val;
+      }
+      default:
+        Log("Unrecognized operator %s", tokens[master_position].str);
+    }
+  }
+  panic("Unexpected error in eval");
+  return -1;
+}
+

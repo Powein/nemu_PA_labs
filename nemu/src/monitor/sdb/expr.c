@@ -284,7 +284,7 @@ word_t eval(word_t p, word_t q) {
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
-     */
+      */
     return eval(p + 1, q - 1);
   }
   else {

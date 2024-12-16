@@ -56,10 +56,10 @@ word_t get_priority(word_t token_type) {
       break;
     }
     default: {
-      Log("Unexpected token type was encountered: %d", token_type);
       pri = -1;
     }
   }
+  Log("Priority of %d is %d", token_type, pri);
   return pri;
 }
 

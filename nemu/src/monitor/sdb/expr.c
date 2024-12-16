@@ -305,6 +305,7 @@ word_t eval(word_t p, word_t q) {
         break;// that's what we want, stop
       }
     }
+    Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
     // leftpart and rightpart, eval them
     word_t left_half_val = eval(p, master_position - 1);
     word_t right_half_val = eval(master_position + 1, q);

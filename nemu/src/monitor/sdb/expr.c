@@ -295,8 +295,18 @@ word_t eval(word_t p, word_t q) {
     word_t lowest_priority = INT32_MAX;
     word_t master_position = -1;
     // get the first lowest priority operator
+    word_t flag = 0;
     for (i = p; i < q + 1; i++)
     {
+      if(tokens[i].type == TK_LEFT_P) {
+        flag = flag + 1;
+      }
+      if(tokens[i].type == TK_RIGHT_P) {
+        flag = flag - 1;
+      }
+      if(flag > 0) {
+        continue;
+      }
       if(lowest_priority > get_priority(tokens[i])) {
         lowest_priority = get_priority(tokens[i]);
         master_position = i;

@@ -148,20 +148,6 @@ void init_regex() {
   }
 }
 
-// // check if close parenthesis is matched
-// static bool is_matched() {
-//   int i = 0;
-//   int cnt = 0;
-//   while (tokens[i] != '\0') {
-//     if (str[i] == '(') {
-//       cnt++;
-//     } else if (str[i] == ')') {
-//       cnt--;
-//     }
-//     i++;
-//   }
-//   return cnt == 0;
-// }
 
 // max length for tokens array
 // TODO: try to use this definition everywhere

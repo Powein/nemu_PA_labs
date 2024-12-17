@@ -48,6 +48,7 @@ word_t get_priority(Token token) {
   word_t pri = 0;
   word_t token_type = token.type;
   switch (token_type) {
+    // follow c language priority
     case TK_AND: {
       pri = 11;
       break;
@@ -465,6 +466,18 @@ word_t eval(word_t p, word_t q) {
       case TK_AND: {
         Log("Opreator found %s", tokens[master_position].str);
         return left_half_val && right_half_val;
+      }
+      case TK_OR: {
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val || right_half_val;
+      }
+      case TK_EQ: {
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val == right_half_val;
+      }
+      case TK_NEQ: {
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val != right_half_val;
       }
       default:
         Log("Unrecognized operator %s", tokens[master_position].str);

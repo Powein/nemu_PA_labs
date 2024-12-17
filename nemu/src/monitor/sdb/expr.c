@@ -441,10 +441,10 @@ word_t eval(word_t p, word_t q) {
       word_t rval = eval(p + 1, q);
       // derefrence
       Log("Derefrencing address 0x%x\n", rval);
-      if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
+      if (rval == 0 || (uintptr_t)rval % sizeof(char) != 0) {
           panic("Invalid memory address for dereference");
       }
-      return *((word_t*)(uintptr_t)rval);
+      return *((char*)(uintptr_t)rval);
       break;
     }
     default: {

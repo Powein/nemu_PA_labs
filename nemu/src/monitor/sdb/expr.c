@@ -170,6 +170,16 @@ void init_regex() {
 static Token tokens[32] __attribute__((used)) = {}; // make gcc happy
 static int nr_token __attribute__((used))  = 0;
 
+static void push_token(char *substr_start, int substr_len, int index) {
+  Token newToken = {.type = rules[index].token_type, .str = ""};
+  strncpy(newToken.str, substr_start, substr_len);
+  tokens[nr_token] = newToken;
+  nr_token = nr_token + 1;
+  return;
+}
+
+
+
 static bool make_token(char *e) {
   // this makes token from the input string `e`
   int position = 0;// the position of the current character in the string
@@ -237,10 +247,7 @@ static bool make_token(char *e) {
             break;
           }
           case TK_DECIMAL: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_HEX: {

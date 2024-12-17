@@ -85,7 +85,7 @@ word_t get_priority(Token token) {
       break;
     }
     default: {
-      pri = INT16_MAX;
+      pri = 0;
     }
   }
   Log("Priority of %s is %d", token.str, pri);

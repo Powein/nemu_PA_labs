@@ -208,17 +208,11 @@ static bool make_token(char *e) {
         assert(nr_token < MAX_TOKENS);
         switch (rules[i].token_type) {
           case TK_ADD: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           };
           case TK_SUB: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           };
           case TK_STAR: {
@@ -240,10 +234,7 @@ static bool make_token(char *e) {
             break;
           }
           case TK_DIV: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_DECIMAL: {
@@ -251,45 +242,27 @@ static bool make_token(char *e) {
             break;
           }
           case TK_HEX: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_NEQ: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_EQ: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_NOTYPE: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_LEFT_P: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_RIGHT_P: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           case TK_NOT: {
@@ -300,31 +273,22 @@ static bool make_token(char *e) {
             nr_token = nr_token + 1;
             break;
           }
-          case TK_AND: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
-            break;
-          }
-          case TK_OR: {
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
-            break;
-          }
+          // case TK_AND: {
+          //   push_token(substr_start, substr_len, i);
+          //   break;
+          // }
+          // case TK_OR: {
+          //   push_token(substr_start, substr_len, i);
+          //   break;
+          // }
           case TK_REGISTER :{
-            Token newToken = {.type = rules[i].token_type, .str = ""};
-            strncpy(newToken.str, substr_start, substr_len);
-            tokens[nr_token] = newToken;
-            nr_token = nr_token + 1;
+            push_token(substr_start, substr_len, i);
             break;
           }
           default: 
+            push_token(substr_start, substr_len, i);
             Log("default"); // panic
         }
-
         break;
       }
     }

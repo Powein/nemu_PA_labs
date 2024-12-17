@@ -25,7 +25,9 @@ enum {
   // higher means higher op priority
   TK_NOTYPE = 256, TK_EQ = 254, TK_SUB = 253, 
   TK_ADD = 252, TK_MUL = 251, TK_DIV = 250, 
-  TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247
+  TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247,
+  TK_AND = 246, TK_OR = 245, TK_HEX = 244, TK_NEQ = 243,
+  TK_NOT = 240, DEREF = 239,
   /* TODO: Add more token types */
 };
 
@@ -84,12 +86,17 @@ static struct rule {
    */
   // former means higher priority
   {" +", TK_NOTYPE},    // spaces
+  {"(0x)[0-9,a-f,A-F]+", TK_HEX}, //hex number
   {"\\+", TK_ADD},         // plus
   {"==", TK_EQ},        // equal
-  {"\\-", TK_SUB}, // regex - token type
+  {"!=", TK_NEQ}, // unequal
+  {"!", TK_NOT},
+  {"&&", TK_AND}, // and
+  {"\\|\\|", TK_OR}, // or
+  {"\\-", TK_SUB}, 
   {"\\/", TK_DIV},
   {"\\*", TK_MUL},
-  {"[0-9]+", TK_DECIMAL}, // regex - token type
+  {"[0-9]+", TK_DECIMAL}, 
   {"\\(", TK_LEFT_P},// (
   {"\\)", TK_RIGHT_P},// )
 };
@@ -181,6 +188,7 @@ static bool make_token(char *e) {
             break;
           };
           case TK_MUL: {
+            // TODO: make dereference here
             Token newToken = {.type = rules[i].token_type, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
@@ -195,6 +203,20 @@ static bool make_token(char *e) {
             break;
           }
           case TK_DECIMAL: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_HEX: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_NEQ: {
             Token newToken = {.type = rules[i].token_type, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
@@ -228,6 +250,25 @@ static bool make_token(char *e) {
             tokens[nr_token] = newToken;
             nr_token = nr_token + 1;
             break;
+          }
+          case TK_NOT: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
+          case TK_AND: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+          }
+          case TK_OR: {
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
           }
           default: 
             Log("default"); // panic
@@ -320,10 +361,23 @@ word_t eval(word_t p, word_t q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-
-    // this is only for decimal currently
-    wchar_t r = strtoul(tokens[p].str, NULL, 10);
+    wchar_t r = 0;
+    // decimal
+    switch (tokens[p].type) {
+      case TK_DECIMAL: {
+        r = strtoul(tokens[p].str, NULL, 10);
+        break;
+      }
+      case TK_HEX: {
+        r = strtoul(tokens[p].str, NULL, 16);
+        break;
+      }
+      default: {
+        panic("Internal Wrong, Can not get the evaluation of the expression!");
+      }
+    };
     return r;
+    // hex
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.

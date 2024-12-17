@@ -19,15 +19,16 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-// encode for tokens
 
+
+// encode for tokens
 enum {
   // higher means higher op priority
   TK_NOTYPE = 256, TK_EQ = 254, TK_SUB = 253, 
   TK_ADD = 252, TK_MUL = 251, TK_DIV = 250, 
   TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247,
   TK_AND = 246, TK_OR = 245, TK_HEX = 244, TK_NEQ = 243,
-  TK_NOT = 240, DEREF = 239,
+  TK_NOT = 240, TK_DEREF = 239,
   /* TODO: Add more token types */
 };
 
@@ -47,24 +48,44 @@ word_t get_priority(Token token) {
   word_t pri = 0;
   word_t token_type = token.type;
   switch (token_type) {
+    case TK_AND: {
+      pri = 11;
+      break;
+    }
+    case TK_OR: {
+      pri = 12;
+      break;
+    }
+    case TK_DEREF :{
+      pri = 2;
+      break;
+    }
     case TK_MUL: {
-      pri = 1;
+      pri = 3;
       break;
     }
     case TK_DIV: {
-      pri = 1;
+      pri = 3;
       break;
     }
     case TK_ADD: {
-      pri = 0;
+      pri = 4;
       break;
     }
     case TK_SUB: {
-      pri = 0;
+      pri = 4;
+      break;
+    }
+    case TK_EQ: {
+      pri = 7;
+      break;
+    }
+    case TK_NEQ: {
+      pri = 7;
       break;
     }
     default: {
-      pri = -1;
+      pri = INT16_MAX;
     }
   }
   Log("Priority of %s is %d", token.str, pri);
@@ -391,7 +412,7 @@ word_t eval(word_t p, word_t q) {
 
     // get the master operator, which is the one with the lowest priority
 
-    word_t lowest_priority = INT32_MAX;
+    word_t lowest_priority = 0;
     word_t master_position = -1;
     // get the first lowest priority operator
     word_t flag = 0;
@@ -412,12 +433,9 @@ word_t eval(word_t p, word_t q) {
         continue;
       }
       word_t current_priority = get_priority(tokens[i]);
-      if(lowest_priority > current_priority) {
+      if(lowest_priority < current_priority) {
         lowest_priority = current_priority;
         master_position = i;
-      }
-      if (lowest_priority == 0) {
-        break;// that's what we want, stop
       }
     }
     Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
@@ -443,6 +461,10 @@ word_t eval(word_t p, word_t q) {
           panic("Division by zero");
         }
         return left_half_val / right_half_val;
+      }
+      case TK_AND: {
+        Log("Opreator found %s", tokens[master_position].str);
+        return left_half_val && right_half_val;
       }
       default:
         Log("Unrecognized operator %s", tokens[master_position].str);

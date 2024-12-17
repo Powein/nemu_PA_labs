@@ -376,7 +376,7 @@ word_t eval(word_t p, word_t q) {
     return eval(p, q - 1);
   }
   if (p > q) {
-    Log("Invalid expression provided.");
+    Log("Invalid expression provided: left is greater than right");
     panic("Internal Wrong, Can not get the evaluation of the expression!");
   }
   else if (p == q) {

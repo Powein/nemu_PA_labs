@@ -207,14 +207,6 @@ static bool make_token(char *e) {
          */
         assert(nr_token < MAX_TOKENS);
         switch (rules[i].token_type) {
-          case TK_ADD: {
-            push_token(substr_start, substr_len, i);
-            break;
-          };
-          case TK_SUB: {
-            push_token(substr_start, substr_len, i);
-            break;
-          };
           case TK_STAR: {
             // TODO: make dereference here
             // if is the first token, make it deref
@@ -233,56 +225,12 @@ static bool make_token(char *e) {
             nr_token = nr_token + 1;
             break;
           }
-          case TK_DIV: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_DECIMAL: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_HEX: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_NEQ: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_EQ: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_NOTYPE: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_LEFT_P: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
-          case TK_RIGHT_P: {
-            push_token(substr_start, substr_len, i);
-            break;
-          }
           case TK_NOT: {
             panic("Not implemented");
             Token newToken = {.type = rules[i].token_type, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
             nr_token = nr_token + 1;
-            break;
-          }
-          // case TK_AND: {
-          //   push_token(substr_start, substr_len, i);
-          //   break;
-          // }
-          // case TK_OR: {
-          //   push_token(substr_start, substr_len, i);
-          //   break;
-          // }
-          case TK_REGISTER :{
-            push_token(substr_start, substr_len, i);
             break;
           }
           default: 

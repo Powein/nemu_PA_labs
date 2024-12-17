@@ -113,7 +113,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"!=", TK_NEQ}, // unequal
   {"!", TK_NOT},
-  {"\\&\\&", TK_AND}, // and
+  {"&&", TK_AND}, // and
   {"\\|\\|", TK_OR}, // or
   {"\\-", TK_SUB}, 
   {"\\/", TK_DIV},

@@ -29,6 +29,7 @@ enum {
   TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247,
   TK_AND = 246, TK_OR = 245, TK_HEX = 244, TK_NEQ = 243,
   TK_NOT = 240, TK_DEREF = 239, TK_STAR = 238,
+  TK_REGISTER = 237,
   /* TODO: Add more token types */
 };
 
@@ -305,6 +306,13 @@ static bool make_token(char *e) {
             nr_token = nr_token + 1;
             break;
           }
+          case TK_REGISTER :{
+            Token newToken = {.type = rules[i].token_type, .str = ""};
+            strncpy(newToken.str, substr_start, substr_len);
+            tokens[nr_token] = newToken;
+            nr_token = nr_token + 1;
+            break;
+          }
           default: 
             Log("default"); // panic
         }
@@ -419,6 +427,12 @@ word_t eval(word_t p, word_t q) {
       }
       case TK_HEX: {
         r = strtoul(tokens[p].str, NULL, 16);
+        break;
+      }
+      case TK_REGISTER: {
+        bool* suc = malloc(sizeof(bool));
+        r = isa_reg_str2val(tokens[p].str, suc);
+        if (!*suc) panic("fail to find that register");
         break;
       }
       default: {

@@ -62,6 +62,11 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  panic("Not implemnted");
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -73,6 +78,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "p", "Print the value of the expression", cmd_p },
+  { "w", "Watch the value of the expression, and break when it changes", cmd_w},
   /* TODO: Add more commands */
 
 };

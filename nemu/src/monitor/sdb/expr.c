@@ -376,6 +376,20 @@ bool check_parentheses(word_t p, word_t q) {
   }
 }
 
+bool check_single_operator(word_t p,word_t q) {
+  /* Check if the expression is a single operator.
+   * If that is the case, return true.
+   * Otherwise, return false.
+   */
+  if (tokens[p].type == TK_DEREF) {
+    return true;
+  } else return false;
+}
+
+
+
+
+
 word_t eval(word_t p, word_t q) {
   /* Get the evaluation of the expression from p to q.
    * q is included.
@@ -419,6 +433,21 @@ word_t eval(word_t p, word_t q) {
      * If that is the case, just throw away the parentheses.
       */
     return eval(p + 1, q - 1);
+  } else if (check_single_operator(p, q) == true){
+    // find the single-operator and do something for them
+    switch (tokens[p].type){
+    case TK_DEREF:{
+      // get right value
+      word_t rval = eval(p + 1, q);
+      // derefrence
+      return *((word_t*)(uintptr_t)rval);
+      break;
+    }
+    default: {
+      panic("NO SUCH OPREATOR! Something may went wrong with check single operator");
+      break;
+    }
+    }
   }
   else {
     /* We should do more things here. */
@@ -456,10 +485,6 @@ word_t eval(word_t p, word_t q) {
     word_t left_half_val = eval(p, master_position - 1);
     word_t right_half_val = eval(master_position + 1, q);
     switch (tokens[master_position].type) {
-      case TK_DEREF: {
-        // temp magic number
-        return 123123;
-      }
       case TK_ADD:{
         Log("Opreator found %s", tokens[master_position].str);
         return left_half_val + right_half_val;

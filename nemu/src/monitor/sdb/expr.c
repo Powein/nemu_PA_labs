@@ -286,12 +286,14 @@ static bool make_token(char *e) {
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
             nr_token = nr_token + 1;
+            break;
           }
           case TK_OR: {
             Token newToken = {.type = rules[i].token_type, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
             nr_token = nr_token + 1;
+            break;
           }
           default: 
             Log("default"); // panic

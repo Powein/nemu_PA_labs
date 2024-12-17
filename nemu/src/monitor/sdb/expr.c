@@ -440,6 +440,7 @@ word_t eval(word_t p, word_t q) {
       // get right value
       word_t rval = eval(p + 1, q);
       // derefrence
+      Log("Derefrencing address %x\n", rval);
       return *((word_t*)(uintptr_t)rval);
       break;
     }

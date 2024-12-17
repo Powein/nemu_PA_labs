@@ -433,7 +433,7 @@ word_t eval(word_t p, word_t q) {
       case TK_REGISTER: {
         bool* suc = malloc(sizeof(bool));
         r = isa_reg_str2val(tokens[p].str, suc);
-        if (!*suc) panic("fail to find that register");
+        // if (!*suc) panic("fail to find that register");
         free(suc);
         break;
       }

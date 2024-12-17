@@ -217,6 +217,8 @@ static bool make_token(char *e) {
             tokens[nr_token - 1].type != TK_HEX)) {
                 Token newToken = {.type = TK_DEREF, .str = ""};
                 strncpy(newToken.str, substr_start, substr_len);
+                tokens[nr_token] = newToken;
+                nr_token = nr_token + 1;
                 break;// engouh
               }
             Token newToken = {.type = TK_MUL, .str = ""};

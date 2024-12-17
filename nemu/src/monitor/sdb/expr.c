@@ -456,6 +456,10 @@ word_t eval(word_t p, word_t q) {
     word_t left_half_val = eval(p, master_position - 1);
     word_t right_half_val = eval(master_position + 1, q);
     switch (tokens[master_position].type) {
+      case TK_DEREF: {
+        // temp magic number
+        return 123123;
+      }
       case TK_ADD:{
         Log("Opreator found %s", tokens[master_position].str);
         return left_half_val + right_half_val;

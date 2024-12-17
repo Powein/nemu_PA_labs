@@ -122,6 +122,7 @@ static struct rule {
   {"[0-9]+", TK_DECIMAL}, 
   {"\\(", TK_LEFT_P},// (
   {"\\)", TK_RIGHT_P},// )
+  {"\\$[a-z]+", TK_REGISTER},
 };
 // len(rules)
 #define NR_REGEX ARRLEN(rules)

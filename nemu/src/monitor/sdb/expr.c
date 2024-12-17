@@ -28,7 +28,7 @@ enum {
   TK_ADD = 252, TK_MUL = 251, TK_DIV = 250, 
   TK_DECIMAL = 249, TK_LEFT_P = 248, TK_RIGHT_P = 247,
   TK_AND = 246, TK_OR = 245, TK_HEX = 244, TK_NEQ = 243,
-  TK_NOT = 240, TK_DEREF = 239,
+  TK_NOT = 240, TK_DEREF = 239, TK_STAR = 238,
   /* TODO: Add more token types */
 };
 
@@ -117,7 +117,7 @@ static struct rule {
   {"\\|\\|", TK_OR}, // or
   {"\\-", TK_SUB}, 
   {"\\/", TK_DIV},
-  {"\\*", TK_MUL},
+  {"\\*", TK_STAR},
   {"[0-9]+", TK_DECIMAL}, 
   {"\\(", TK_LEFT_P},// (
   {"\\)", TK_RIGHT_P},// )
@@ -209,9 +209,9 @@ static bool make_token(char *e) {
             nr_token = nr_token + 1;
             break;
           };
-          case TK_MUL: {
+          case TK_STAR: {
             // TODO: make dereference here
-            Token newToken = {.type = rules[i].token_type, .str = ""};
+            Token newToken = {.type = TK_MUL, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;
             nr_token = nr_token + 1;

@@ -111,11 +111,11 @@ static int cmd_x(char *args) {
   // }
   // Log("The address is %s", arg_ad);
   // word_t address = expr(arg_ad, success);
-  word_t address = strtol(arg_ad, NULL, 0);
-  // if(!*success) {
-  //   printf("Invalid expression for address");
-  // }
-  // word_t address = expr(arg_ad, success);
+  // word_t address = strtol(arg_ad, NULL, 0);
+  word_t address = expr(arg_ad, success);
+  if(!*success) {
+    printf("Invalid expression for address");
+  }
   free(success);
   printf("XXXXXXXX");
   for (word_t i = 0; i < BYTE_PER_ROW; i++)

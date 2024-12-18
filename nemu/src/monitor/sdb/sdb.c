@@ -125,6 +125,12 @@ static int cmd_x(char *args) {
   };
   word_t byte_count = atoi(arg_bc);
   word_t address = strtol(arg_ad, NULL, 16);
+  printf("%x ", address);
+  for (word_t i = 0; i < BYTE_PER_ROW; i++)
+  {
+    printf(" %02x", i);
+  }
+  
   // Log("Get the args");
   for (int i = 0; i < byte_count; i++) {
     word_t t = paddr_read(address + i, 1);

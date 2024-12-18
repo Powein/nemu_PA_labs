@@ -191,9 +191,8 @@ static bool make_token(char *e) {
         assert(nr_token < MAX_TOKENS);
         switch (rules[i].token_type) {
           case TK_STAR: {
-            // TODO: make dereference here
             // if is the first token, make it deref
-            // if its former is not a number, make it deref
+            // if its former is not a number/ notype, make it deref
             if (nr_token == 0 || (tokens[nr_token - 1].type != TK_DECIMAL &&
             tokens[nr_token - 1].type != TK_HEX && tokens[nr_token - 1].type != TK_NOTYPE)) {
                 Token newToken = {.type = TK_DEREF, .str = ""};

@@ -365,9 +365,9 @@ word_t eval(word_t p, word_t q) {
       // get right value
       word_t rval = eval(p + 1, q);
       // derefrence
-      if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
-          panic("Invalid memory address for dereference");
-      }
+      // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
+      //     panic("Invalid memory address for dereference");
+      // }
       Log("Derefrencing address 0x%x\n", rval);
       return paddr_read(rval, 1);
       break;

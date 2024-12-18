@@ -106,6 +106,10 @@ static int cmd_x(char *args) {
   };
   Log("Translating expression to integers.");
   word_t byte_count = expr(arg_bc, success);
+  if(!*success) {
+    printf("Invalid expression for byte count");
+    return -1;
+  }
   // if(!*success) {
   //   printf("Invalid expression for byte count");
   // }
@@ -115,6 +119,7 @@ static int cmd_x(char *args) {
   word_t address = expr(arg_ad, success);
   if(!*success) {
     printf("Invalid expression for address");
+    return -1;
   }
   free(success);
   // Log("Get the args");

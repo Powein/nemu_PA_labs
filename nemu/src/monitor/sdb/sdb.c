@@ -102,6 +102,7 @@ static int cmd_info(char *args) {
   // if (args == NULL) {
   //   info_reg();
   //   }  
+  isa_reg_display();
   return 0;
 }
 static int cmd_help(char *args);

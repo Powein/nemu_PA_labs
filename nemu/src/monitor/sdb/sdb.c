@@ -128,13 +128,13 @@ static int cmd_x(char *args) {
   // Log("Get the args");
   for (int i = 0; i < byte_count; i++) {
     word_t t = paddr_read(address + i, 1);
-    printf("%x %x", address + i, t);
-    ct++;
     if (ct % 4 == 0) {
       printf("\n");
-    } else {
-      printf(" ");
+      printf("%x", address + 1);
     }
+    printf("%x", t);
+    printf(" ");
+    ct++;
   }
   return 0;
 }

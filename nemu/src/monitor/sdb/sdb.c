@@ -34,19 +34,6 @@ void generate_some_pointers() {
   Log("newint = %d", *newint);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
@@ -118,13 +105,16 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
   char* arg_bc = strtok(NULL, " ");
   char* arg_ad = strtok(NULL, " ");
+  bool success = malloc(sizeof(bool));
+  success = false;
   int ct = 0;
   if (arg_bc == NULL || arg_ad == NULL) {
-    printf("Usage: x <byte_count(decimal)> <address(hex)>");
+    printf("Usage: x <byte_count(decimal)> <address(expression)>");
     return 0;
   };
   word_t byte_count = atoi(arg_bc);
-  word_t address = strtol(arg_ad, NULL, 16);
+  // word_t address = strtol(arg_ad, NULL, 16);
+  word_t address = expr(arg_ad, &success);
   printf("XXXXXXXX");
   for (word_t i = 0; i < BYTE_PER_ROW; i++)
   {

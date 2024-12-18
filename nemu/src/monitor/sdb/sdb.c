@@ -116,20 +116,19 @@ static int cmd_info(char *args) {
 
 //word_t paddr_read(paddr_t addr, int len);
 static int cmd_x(char *args) {
-  char* tk; 
-  do {
-    tk = strtok(NULL, " ");
-    Log("tk: %s", tk);
-    word_t x = atoi(tk);
-    Log("x: %x", x);
-  } while(tk != NULL);
-  // int byte_count = atoi(strtok(NULL, " "));
-  // int address = atoi(strtok(NULL, " "));
+  char* arg_bc = strtok(NULL, " ");
+  char* arg_ad = strtok(NULL, " ");
+  if (arg_bc == NULL || arg_ad == NULL) {
+    printf("Usage: x <byte_count(decimal)> <address(hex)>");
+    return 0;
+  };
+  word_t byte_count = atoi(arg_bc);
+  word_t address = strtol(strtok(NULL, " "), NULL, 16);
   
-  // for (int i = 0; i < byte_count; i++) {
-  //   word_t t = paddr_read(address + i, 1);
-  //   printf("%x %x ", address + i, t);
-  // }
+  for (int i = 0; i < byte_count; i++) {
+    word_t t = paddr_read(address + i, 1);
+    printf("%x %x ", address + i, t);
+  }
   return 0;
 }
 

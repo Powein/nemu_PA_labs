@@ -409,7 +409,9 @@ word_t eval(word_t p, word_t q, bool* success) {
       }
     }
     if (master_position == -1) {
-      panic("what the fuck? No master operator found");
+      // panic("what the fuck? No master operator found");
+      *success = false;
+      return 0;
     }
     Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
     // leftpart and rightpart, eval them

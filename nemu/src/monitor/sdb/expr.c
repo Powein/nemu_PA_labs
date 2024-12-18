@@ -56,7 +56,7 @@ word_t get_priority(Token token) {
       break;
     }
     case TK_DEREF :{
-      pri = 2;
+      pri = 1;
       break;
     }
     case TK_MUL: {

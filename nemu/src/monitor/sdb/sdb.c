@@ -108,7 +108,7 @@ static int cmd_x(char *args) {
   word_t byte_count = expr(arg_bc, success);
   if(!*success) {
     printf("Invalid expression for byte count");
-    return -1;
+    return 0;
   }
   // if(!*success) {
   //   printf("Invalid expression for byte count");
@@ -119,13 +119,13 @@ static int cmd_x(char *args) {
   word_t address = expr(arg_ad, success);
   if(!*success) {
     printf("Invalid expression for address");
-    return -1;
+    return 0;
   }
   free(success);
   // Log("Get the args");
   if (address < 0x80000000 || address + byte_count >= 0x87ffffff) {
     printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
-    return -1;
+    return 0;
   }
   printf("XXXXXXXX");
   for (word_t i = 0; i < BYTE_PER_ROW; i++)

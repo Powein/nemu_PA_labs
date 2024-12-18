@@ -118,6 +118,7 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
   char* arg_bc = strtok(NULL, " ");
   char* arg_ad = strtok(NULL, " ");
+  int ct = 0;
   if (arg_bc == NULL || arg_ad == NULL) {
     printf("Usage: x <byte_count(decimal)> <address(hex)>");
     return 0;
@@ -128,6 +129,12 @@ static int cmd_x(char *args) {
   for (int i = 0; i < byte_count; i++) {
     word_t t = paddr_read(address + i, 1);
     printf("%x %x", address + i, t);
+    ct++;
+    if (ct % 4 == 0) {
+      printf("\n");
+    } else {
+      printf(" ");
+    }
   }
   return 0;
 }

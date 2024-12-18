@@ -113,7 +113,7 @@ static int cmd_info(char *args) {
   return 0;
 }
 
-
+#define BYTE_PER_ROW 16
 //word_t paddr_read(paddr_t addr, int len);
 static int cmd_x(char *args) {
   char* arg_bc = strtok(NULL, " ");
@@ -128,7 +128,7 @@ static int cmd_x(char *args) {
   // Log("Get the args");
   for (int i = 0; i < byte_count; i++) {
     word_t t = paddr_read(address + i, 1);
-    if (ct % 4 == 0) {
+    if (ct % BYTE_PER_ROW == 0) {
       printf("\n");
       printf("%x", address + i);
     }

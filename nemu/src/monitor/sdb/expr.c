@@ -241,7 +241,8 @@ word_t eval(word_t p, word_t q, bool *success);
 word_t expr(char *e, bool *success) {
   // init the return val
   if(*success == false){
-    Warn("WTF");
+    Warn("Passing a false value into expr!");
+    return 0;
   }
 
   if (!make_token(e)) {
@@ -249,9 +250,6 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   Log("Successfully make token, now evaluating");
-  if(*success == false){
-    Warn("WTF");
-  }
   return eval((word_t) 0, (word_t) (nr_token - 1), success);
   // may check the validity of the tokens here
   

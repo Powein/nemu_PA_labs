@@ -236,7 +236,7 @@ static bool make_token(char *e) {
   return true;
 }
 
-word_t eval(word_t p, word_t q);
+word_t eval(word_t p, word_t q, bool *success);
 word_t expr(char *e, bool *success) {
   // init the return val
 
@@ -246,12 +246,9 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   Log("Successfully make token, now evaluating");
-  return eval((word_t) 0, (word_t) (nr_token - 1));
+  return eval((word_t) 0, (word_t) (nr_token - 1), success);
   // may check the validity of the tokens here
   
-  /* TODO: Insert codes to evaluate the expression. */
-  // evaluate that thing and return it
-  // TODO();
 
   // return 0;
 }
@@ -304,16 +301,16 @@ bool check_single_operator(word_t p,word_t q) {
 
 
 
-word_t eval(word_t p, word_t q) {
+word_t eval(word_t p, word_t q, bool* success) {
   /* Get the evaluation of the expression from p to q.
    * q is included.
   */
   int i = 0;
   if (tokens[p].type == TK_NOTYPE) {
-    return eval(p + 1, q);
+    return eval(p + 1, q, success);
   }
   if (tokens[q].type == TK_NOTYPE) {
-    return eval(p, q - 1);
+    return eval(p, q - 1, success);
   }
   if (p > q) {
     Log("Invalid expression provided: left is greater than right");
@@ -336,13 +333,8 @@ word_t eval(word_t p, word_t q) {
         break;
       }
       case TK_REGISTER: {
-        bool* suc = malloc(sizeof(bool));
-        r = isa_reg_str2val(tokens[p].str, suc);
-        if (!*suc){
-          printf("fail to find that register: does not exist");
-          return 0; 
-        }
-        free(suc);
+        r = isa_reg_str2val(tokens[p].str, success);
+        if(!(*success)) return 0;
         return r;
         break;
       }
@@ -357,19 +349,20 @@ word_t eval(word_t p, word_t q) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
       */
-    return eval(p + 1, q - 1);
+    return eval(p + 1, q - 1, success);
   } else if (check_single_operator(p, q) == true){
     // find the single-operator and do something for them
     switch (tokens[p].type){
     case TK_DEREF:{
       // get right value
-      word_t rval = eval(p + 1, q);
+      word_t rval = eval(p + 1, q, success);
       // derefrence
       // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
       //     panic("Invalid memory address for dereference");
       // }
       if (rval < 0x80000000 || rval > 0x87ffffff) {
         printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
+        *(success) = false;
         return 0;
       }
       Log("Derefrencing address 0x%x\n", rval);
@@ -415,8 +408,8 @@ word_t eval(word_t p, word_t q) {
     }
     Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
     // leftpart and rightpart, eval them
-    word_t left_half_val = eval(p, master_position - 1);
-    word_t right_half_val = eval(master_position + 1, q);
+    word_t left_half_val = eval(p, master_position - 1, success);
+    word_t right_half_val = eval(master_position + 1, q, success);
     switch (tokens[master_position].type) {
       case TK_ADD:{
         Log("Opreator found %s", tokens[master_position].str);

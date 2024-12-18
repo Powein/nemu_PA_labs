@@ -350,7 +350,8 @@ word_t eval(word_t p, word_t q, bool* success) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
       */
-    return eval(p + 1, q - 1, success);
+      Log("remove parentheses at %u-%u", p, q);
+      return eval(p + 1, q - 1, success);
   } else if (check_single_operator(p, q) == true){
     // find the single-operator and do something for them
     switch (tokens[p].type){

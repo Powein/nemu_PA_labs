@@ -88,6 +88,22 @@ static int cmd_w(char *args) {
   return 0;
 }
 
+static int cmd_si(char *args) {
+  if (args == NULL) {
+    cpu_exec(1);
+  } else {
+    int step = atoi(args);
+    cpu_exec(step);
+  }
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  // if (args == NULL) {
+  //   info_reg();
+  //   }  
+  return 0;
+}
 static int cmd_help(char *args);
 
 static struct {
@@ -100,6 +116,11 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "p", "Print the value of the expression", cmd_p },
   { "w", "Watch the value of the expression, and break when it changes", cmd_w},
+  { "si", "Take a single step of the program", cmd_si},
+  { "info", "Display the status of the program", cmd_info},
+  // { "x", "Examine memory", cmd_x},
+  // { "d", "Delete a watchpoint", cmd_d},
+
   /* TODO: Add more commands */
 
 };

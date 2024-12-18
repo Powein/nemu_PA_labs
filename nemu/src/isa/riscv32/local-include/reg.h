@@ -23,7 +23,7 @@ static inline int check_reg_idx(int idx) {
   return idx;
 }
 
-#define gpr(idx) (cpu.gpr[check_reg_idx(idx)])
+#define gpr(idx) (cpu.gpr[check_reg_idx(idx)]) // 保证idx合法, 然后返回对应的寄存器
 
 static inline const char* reg_name(int idx) {
   extern const char* regs[];

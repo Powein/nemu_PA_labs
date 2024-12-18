@@ -104,6 +104,7 @@ static int cmd_x(char *args) {
     printf("Usage: x <byte_count(expression)> <address(hex)>\n");
     return 0;
   };
+  Log("Translating expression to integers.");
   word_t byte_count = expr(arg_bc, success);
   // if(!*success) {
   //   printf("Invalid expression for byte count");

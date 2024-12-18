@@ -250,7 +250,11 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   Log("Successfully make token, now evaluating");
-  return eval((word_t) 0, (word_t) (nr_token - 1), success);
+  word_t value = eval((word_t) 0, (word_t) (nr_token - 1), success);
+  if(!*success) {
+    Warn("Fail to get the expression value. Returning 0");
+  }
+  return value;
   // may check the validity of the tokens here
   
 
@@ -346,7 +350,10 @@ word_t eval(word_t p, word_t q, bool* success) {
         break;
       }
       default: {
-        panic("Internal Wrong, Can not get the evaluation of the expression!");
+        // panic("Internal Wrong, Can not get the evaluation of the expression!");
+        Warn("Not recognized token type when p == q. May add more numeric cases.");
+        *success = false;
+        return 0;
       }
     };
     return r;
@@ -466,7 +473,7 @@ word_t eval(word_t p, word_t q, bool* success) {
     }
   }
   // panic("Unexpected error in eval");
-  Warn("Eval aborted!");
+  Warn("Not a recognized double operator!");
   *success = false;
   return 0;
 }

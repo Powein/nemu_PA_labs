@@ -40,7 +40,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   for (word_t i = 0; i < sizeof(regs) / sizeof(regs[0]); i++){
     if (strcmp(s, regs[i]) == 0){
       *success = true;
-      return cpu.gpr[i];
+        return cpu.gpr[i];
       }
     }
   return 0;

@@ -303,6 +303,9 @@ bool check_single_operator(word_t p,word_t q) {
 
 
 word_t eval(word_t p, word_t q, bool* success) {
+  if (*success == false) {
+    return 0;
+  };
   /* Get the evaluation of the expression from p to q.
    * q is included.
   */
@@ -317,6 +320,8 @@ word_t eval(word_t p, word_t q, bool* success) {
     Log("Invalid expression provided: left is greater than right");
     // panic("Internal Wrong, Can not get the evaluation of the expression!");
     Warn("Invalid expression provided!");
+    *success = false;
+    return 0;
   }
   else if (p == q) {
     /* Single token.
@@ -459,7 +464,9 @@ word_t eval(word_t p, word_t q, bool* success) {
         Log("Unrecognized operator %s", tokens[master_position].str);
     }
   }
-  panic("Unexpected error in eval");
-  return -1;
+  // panic("Unexpected error in eval");
+  Warn("Eval aborted!");
+  *success = false;
+  return 0;
 }
 

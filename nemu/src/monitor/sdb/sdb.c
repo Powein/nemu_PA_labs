@@ -99,10 +99,14 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  // if (args == NULL) {
-  //   info_reg();
-  //   }  
-  isa_reg_display();
+  if (strcmp(args, "r") == 0) {
+    isa_reg_display();
+  } else if (strcmp(args, "w") == 0) {
+    // watchpoint_display();
+    panic("Not implemented");
+  } else {
+    printf("Usage: info r for reg, w for watchpoints");
+  }
   return 0;
 }
 static int cmd_help(char *args);

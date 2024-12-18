@@ -265,7 +265,8 @@ bool check_parentheses(word_t p, word_t q) {
   word_t become_zero_cnt = 0;
   for (i = p; i <= q; i++) {
     if(left_count < 0) {
-      panic("Parentheses are not matched");
+      Warn("Parentheses are not matched");
+      return false;
     }
     if (tokens[i].type == TK_LEFT_P) {
       left_count ++;

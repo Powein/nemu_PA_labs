@@ -25,9 +25,13 @@ const char *regs[] = {
 
 void isa_reg_display() {
   Log("Registers:");
+  int ct = 0;
   for (size_t i = 0; i < sizeof(regs) / sizeof(regs[0]); i++){
     word_t val = cpu.gpr[i];
-    printf("%s 0x%08x\n", regs[i], val);
+    printf("%s 0x%08x", regs[i], val);
+    ct++;
+    if (ct % 4 == 0) printf("\n");
+    else printf("\t");
   }
 }
 

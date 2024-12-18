@@ -123,7 +123,7 @@ static int cmd_x(char *args) {
     return 0;
   };
   word_t byte_count = atoi(arg_bc);
-  word_t address = strtol(strtok(NULL, " "), NULL, 16);
+  word_t address = strtol(arg_ad, NULL, 16);
   Log("Get the args");
   for (int i = 0; i < byte_count; i++) {
     // word_t t = paddr_read(address + i, 1);

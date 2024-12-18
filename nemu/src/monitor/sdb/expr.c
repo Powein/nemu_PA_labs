@@ -246,6 +246,7 @@ word_t expr(char *e, bool *success) {
   }
 
   if (!make_token(e)) {
+    Warn("Fail to get the expression value. Returning 0");
     *success = false;
     return 0;
   }

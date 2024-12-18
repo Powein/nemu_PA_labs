@@ -126,8 +126,8 @@ static int cmd_x(char *args) {
   word_t address = strtol(strtok(NULL, " "), NULL, 16);
   
   for (int i = 0; i < byte_count; i++) {
-    word_t t = paddr_read(address + i, 1);
-    printf("%x %x ", address + i, t);
+    // word_t t = paddr_read(address + i, 1);
+    printf("%x", address + i);
   }
   return 0;
 }

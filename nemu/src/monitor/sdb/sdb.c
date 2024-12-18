@@ -19,6 +19,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+#include <memory/paddr.h>
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -110,6 +112,22 @@ static int cmd_info(char *args) {
   }
   return 0;
 }
+
+
+//word_t paddr_read(paddr_t addr, int len);
+static int cmd_x(char *args) {
+  // int byte_count = atoi(args[1]);
+  // int address = atoi(args[2]);
+  // for (int i = 0; i < byte_count; i++) {
+  //   word_t t = paddr_read(address + i, 1);
+  //   printf("%x %x ", address + i, t);
+  // }
+  return 0;
+}
+
+
+
+
 static int cmd_help(char *args);
 
 static struct {
@@ -124,7 +142,7 @@ static struct {
   { "w", "Watch the value of the expression, and break when it changes", cmd_w},
   { "si", "Take a single step of the program", cmd_si},
   { "info", "Display the status of the program", cmd_info},
-  // { "x", "Examine memory", cmd_x},
+  { "x", "Examine memory", cmd_x},
   // { "d", "Delete a watchpoint", cmd_d},
 
   /* TODO: Add more commands */
@@ -161,7 +179,7 @@ void sdb_set_batch_mode() {
 
 void sdb_mainloop() {
   // for test
-  generate_some_pointers();
+  // generate_some_pointers();
 
   if (is_batch_mode) {
     cmd_c(NULL);

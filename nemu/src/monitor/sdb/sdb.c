@@ -113,8 +113,8 @@ static int cmd_x(char *args) {
     return 0;
   };
   word_t byte_count = expr(arg_bc, success);
-  // word_t address = strtol(arg_ad, NULL, 16);
-  word_t address = expr(arg_ad, success);
+  word_t address = strtol(arg_ad, NULL, 16);
+  // word_t address = expr(arg_ad, success);
   free(success);
   printf("XXXXXXXX");
   for (word_t i = 0; i < BYTE_PER_ROW; i++)

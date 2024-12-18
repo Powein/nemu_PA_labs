@@ -120,6 +120,8 @@ static int cmd_x(char *args) {
   do {
     tk = strtok(NULL, " ");
     Log("tk: %s", tk);
+    word_t x = atoi(tk);
+    Log("x: %x", x);
   } while(tk != NULL);
   // int byte_count = atoi(strtok(NULL, " "));
   // int address = atoi(strtok(NULL, " "));

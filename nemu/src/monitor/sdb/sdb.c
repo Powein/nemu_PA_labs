@@ -105,9 +105,9 @@ static int cmd_x(char *args) {
     return 0;
   };
   word_t byte_count = expr(arg_bc, success);
-  if(!*success) {
-    printf("Invalid expression for byte count");
-  }
+  // if(!*success) {
+  //   printf("Invalid expression for byte count");
+  // }
   // Log("The address is %s", arg_ad);
   // word_t address = expr(arg_ad, success);
   word_t address = strtol(arg_ad, NULL, 0);

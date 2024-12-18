@@ -195,7 +195,7 @@ static bool make_token(char *e) {
             // if is the first token, make it deref
             // if its former is not a number, make it deref
             if (nr_token == 0 || (tokens[nr_token - 1].type != TK_DECIMAL &&
-            tokens[nr_token - 1].type != TK_HEX)) {
+            tokens[nr_token - 1].type != TK_HEX && tokens[nr_token - 1].type != TK_NOTYPE)) {
                 Token newToken = {.type = TK_DEREF, .str = ""};
                 strncpy(newToken.str, substr_start, substr_len);
                 tokens[nr_token] = newToken;

@@ -315,7 +315,8 @@ word_t eval(word_t p, word_t q, bool* success) {
   }
   if (p > q) {
     Log("Invalid expression provided: left is greater than right");
-    panic("Internal Wrong, Can not get the evaluation of the expression!");
+    // panic("Internal Wrong, Can not get the evaluation of the expression!");
+    Warn("Invalid expression provided!");
   }
   else if (p == q) {
     /* Single token.

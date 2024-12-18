@@ -87,7 +87,7 @@ static int cmd_info(char *args) {
     // watchpoint_display();
     panic("Not implemented");
   } else {
-    printf("Usage: info r for reg, w for watchpoints");
+    printf("Usage: info r for reg, w for watchpoints\n");
   }
   return 0;
 }
@@ -147,6 +147,11 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_go(char *args) {
+  // test anything
+  init_wp_pool(); // init_wp_pool();
+  return 0;
+}
 static int cmd_help(char *args);
 
 static struct {
@@ -162,6 +167,7 @@ static struct {
   { "si", "Take a single step of the program", cmd_si},
   { "info", "Display the status of the program", cmd_info},
   { "x", "Examine memory", cmd_x},
+  { "go", "test", cmd_go},
   // { "d", "Delete a watchpoint", cmd_d},
 
   /* TODO: Add more commands */

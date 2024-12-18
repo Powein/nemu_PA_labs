@@ -247,6 +247,9 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   Log("Successfully make token, now evaluating");
+  if(*success == false){
+    Warn("WTF");
+  }
   return eval((word_t) 0, (word_t) (nr_token - 1), success);
   // may check the validity of the tokens here
   
@@ -304,9 +307,9 @@ bool check_single_operator(word_t p,word_t q) {
 
 
 word_t eval(word_t p, word_t q, bool* success) {
-  // if (*success == false) {
-  //   return 0;
-  // };
+  if (*success == false) {
+    return 0;
+  };
   /* Get the evaluation of the expression from p to q.
    * q is included.
   */

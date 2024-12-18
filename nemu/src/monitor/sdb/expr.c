@@ -369,7 +369,7 @@ word_t eval(word_t p, word_t q) {
       //     panic("Invalid memory address for dereference");
       // }
       if (rval < 0x80000000 || rval > 0x87ffffff) {
-        printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]");
+        printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
         return 0;
       }
       Log("Derefrencing address 0x%x\n", rval);

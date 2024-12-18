@@ -124,7 +124,7 @@ static int cmd_x(char *args) {
   };
   word_t byte_count = atoi(arg_bc);
   word_t address = strtol(strtok(NULL, " "), NULL, 16);
-  
+  Log("Get the args");
   for (int i = 0; i < byte_count; i++) {
     // word_t t = paddr_read(address + i, 1);
     printf("%x", address + i);

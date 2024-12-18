@@ -98,7 +98,7 @@ static int cmd_x(char *args) {
   char* arg_bc = strtok(NULL, " ");
   char* arg_ad = strtok(NULL, " ");
   bool* success = malloc(sizeof(bool));
-  success = false;
+  *success = true;
   int ct = 0;
   if (arg_bc == NULL || arg_ad == NULL) {
     printf("Usage: x <byte_count(expression)> <address(hex)>\n");

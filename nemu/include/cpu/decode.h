@@ -87,6 +87,9 @@ finish:
 
 
 // --- pattern matching wrappers for decode ---
+// key, mask shift are in the instruction's bit order
+// pattern decode decodes the pattern in the bit order of the instruction
+
 #define INSTPAT(pattern, ...) do { \
   uint64_t key, mask, shift; \
   pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \

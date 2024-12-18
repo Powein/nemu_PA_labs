@@ -441,6 +441,7 @@ word_t eval(word_t p, word_t q, bool* success) {
         return left_half_val != right_half_val;
       }
       default:
+        Log("Checking single operator.");
         if (check_single_operator(p, q) == true){
           // find the single-operator and do something for them
           switch (tokens[p].type){

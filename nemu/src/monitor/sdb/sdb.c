@@ -130,12 +130,13 @@ static int cmd_x(char *args) {
     word_t t = paddr_read(address + i, 1);
     if (ct % 4 == 0) {
       printf("\n");
-      printf("%x", address + 1);
+      printf("%x", address + i);
     }
-    printf("%x", t);
     printf(" ");
+    printf("%02x", t);
     ct++;
   }
+  printf("\n");
   return 0;
 }
 

@@ -117,18 +117,18 @@ static int cmd_x(char *args) {
     printf("Invalid expression for address");
   }
   free(success);
-  printf("XXXXXXXX");
-  for (word_t i = 0; i < BYTE_PER_ROW; i++)
-  {
-    printf(" %02x", i);
-  }
-  
   // Log("Get the args");
   if (address < 0x80000000 || address + byte_count >= 0x87ffffff) {
     Warn("Not a effective address.");
     printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
     return -1;
   }
+  printf("XXXXXXXX");
+  for (word_t i = 0; i < BYTE_PER_ROW; i++)
+  {
+    printf(" %02x", i);
+  }
+  
   for (int i = 0; i < byte_count; i++) {
     word_t t = paddr_read(address + i, 1);
     if (ct % BYTE_PER_ROW == 0) {

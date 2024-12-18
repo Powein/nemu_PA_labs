@@ -26,14 +26,6 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 
-void generate_some_pointers() {
-  Log("generate some pointers");
-  int* newint = malloc(sizeof(int));
-  * newint = 123123;
-  Log("newint = %p", newint);
-  Log("newint = %d", *newint);
-}
-
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;

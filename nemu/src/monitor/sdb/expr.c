@@ -41,10 +41,7 @@ typedef struct token {
 word_t get_priority(Token token) {
   /* Get the priority of the operator.
    * The higher the priority, the lower the number.
-   * For now, we only have two priorities: 0 and 1.
-   * 0 is for + and -.
-   * 1 is for * and /.
-   * -1 is for default and extras.
+   * Follows the priority of C language operators.
    */
   word_t pri = 0;
   word_t token_type = token.type;

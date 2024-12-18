@@ -119,7 +119,6 @@ static int cmd_x(char *args) {
   free(success);
   // Log("Get the args");
   if (address < 0x80000000 || address + byte_count >= 0x87ffffff) {
-    Warn("Not a effective address.");
     printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
     return -1;
   }

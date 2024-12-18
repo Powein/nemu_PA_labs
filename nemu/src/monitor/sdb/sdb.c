@@ -101,7 +101,7 @@ static int cmd_x(char *args) {
   success = false;
   int ct = 0;
   if (arg_bc == NULL || arg_ad == NULL) {
-    printf("Usage: x <byte_count(expression)> <address(hex)>");
+    printf("Usage: x <byte_count(expression)> <address(hex)>\n");
     return 0;
   };
   word_t byte_count = expr(arg_bc, success);

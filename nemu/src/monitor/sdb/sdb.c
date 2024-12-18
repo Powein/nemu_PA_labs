@@ -125,7 +125,7 @@ static int cmd_x(char *args) {
   };
   word_t byte_count = atoi(arg_bc);
   word_t address = strtol(arg_ad, NULL, 16);
-  printf("%x ", address);
+  printf("%x", address);
   for (word_t i = 0; i < BYTE_PER_ROW; i++)
   {
     printf(" %02x", i);

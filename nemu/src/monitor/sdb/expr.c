@@ -410,7 +410,7 @@ word_t eval(word_t p, word_t q, bool* success) {
     }
     if (master_position == -1) {
       // panic("what the fuck? No master operator found");
-      Warn("Sth went rwong");
+      Warn("No master operator found!");
       *success = false;
       return 0;
     }

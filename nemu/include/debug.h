@@ -24,6 +24,10 @@
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
+#define Warn(format, ...) \
+    _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_YELLOW) "\n", \
+        __FILE__, __LINE__, __func__, ## __VA_ARGS__)
+
 #define Assert(cond, format, ...) \
   do { \
     if (!(cond)) { \
@@ -37,7 +41,7 @@
   } while (0)
 
 #define panic(format, ...) Assert(0, format, ## __VA_ARGS__)
-#define Warn(format, ...) Assert(1, format, ## __VA_ARGS__)
+
 #define TODO() panic("please implement me")
 
 #endif

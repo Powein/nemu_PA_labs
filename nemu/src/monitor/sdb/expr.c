@@ -408,6 +408,9 @@ word_t eval(word_t p, word_t q, bool* success) {
         master_position = i;
       }
     }
+    if (master_position == -1) {
+      panic("what the fuck? No master operator found");
+    }
     Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
     // leftpart and rightpart, eval them
     word_t left_half_val = eval(p, master_position - 1, success);

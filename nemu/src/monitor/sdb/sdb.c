@@ -107,7 +107,7 @@ static int cmd_x(char *args) {
   Log("Translating expression to integers.");
   word_t byte_count = expr(arg_bc, success);
   if(!*success) {
-    printf("Invalid expression for byte count");
+    printf("Invalid expression for byte count\n");
     return 0;
   }
   // if(!*success) {
@@ -118,7 +118,7 @@ static int cmd_x(char *args) {
   // word_t address = strtol(arg_ad, NULL, 0);
   word_t address = expr(arg_ad, success);
   if(!*success) {
-    printf("Invalid expression for address");
+    printf("Invalid expression for address\n");
     return 0;
   }
   free(success);

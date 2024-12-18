@@ -422,7 +422,9 @@ word_t eval(word_t p, word_t q, bool* success) {
           break;
         }
         default: {
-          panic("NO SUCH OPREATOR! Something may went wrong with check single operator");
+          Warn("NO SUCH OPREATOR! Something may went wrong with check single operator");
+          *success = false;
+          return 0;
           break;
         }
       }
@@ -466,33 +468,6 @@ word_t eval(word_t p, word_t q, bool* success) {
         return left_half_val != right_half_val;
       }
       default:
-        // Log("Checking single operator.");
-        // if (check_single_operator(p, q) == true){
-        //   // find the single-operator and do something for them
-        //   switch (tokens[p].type){
-        //     case TK_DEREF:{
-        //       // get right value
-        //       word_t rval = eval(p + 1, q, success);
-        //       // derefrence
-        //       // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
-        //       //     panic("Invalid memory address for dereference");
-        //       // }
-        //       if (rval < 0x80000000 || rval > 0x87ffffff) {
-        //         Warn("Not a effective address.");
-        //         printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
-        //         *(success) = false;
-        //         return 0;
-        //       }
-        //       Log("Derefrencing address 0x%x\n", rval);
-        //       return paddr_read(rval, 1);
-        //       break;
-        //     }
-        //     default: {
-        //       panic("NO SUCH OPREATOR! Something may went wrong with check single operator");
-        //       break;
-        //     }
-        //   }
-        // }
         Log("Unrecognized operator %s", tokens[master_position].str);
     }
   }

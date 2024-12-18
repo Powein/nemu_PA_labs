@@ -212,7 +212,8 @@ static bool make_token(char *e) {
             break;
           }
           case TK_NOT: {
-            panic("Not implemented");
+            Log("Not implemented");
+            return false;
             Token newToken = {.type = rules[i].token_type, .str = ""};
             strncpy(newToken.str, substr_start, substr_len);
             tokens[nr_token] = newToken;

@@ -302,10 +302,6 @@ bool check_single_operator(word_t p,word_t q) {
   } else return false;
 }
 
-
-
-
-
 word_t eval(word_t p, word_t q, bool* success) {
   if (*success == false) {
     return 0;
@@ -373,6 +369,7 @@ word_t eval(word_t p, word_t q, bool* success) {
       //     panic("Invalid memory address for dereference");
       // }
       if (rval < 0x80000000 || rval > 0x87ffffff) {
+        Warn("Not a effective address.");
         printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
         *(success) = false;
         return 0;

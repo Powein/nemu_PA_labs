@@ -240,7 +240,9 @@ static bool make_token(char *e) {
 word_t eval(word_t p, word_t q, bool *success);
 word_t expr(char *e, bool *success) {
   // init the return val
-
+  if(*success == false){
+    Warn("WTF");
+  }
 
   if (!make_token(e)) {
     *success = false;

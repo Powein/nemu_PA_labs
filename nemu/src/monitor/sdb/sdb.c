@@ -105,16 +105,17 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
   char* arg_bc = strtok(NULL, " ");
   char* arg_ad = strtok(NULL, " ");
-  bool success = malloc(sizeof(bool));
+  bool* success = malloc(sizeof(bool));
   success = false;
   int ct = 0;
   if (arg_bc == NULL || arg_ad == NULL) {
-    printf("Usage: x <byte_count(decimal)> <address(expression)>");
+    printf("Usage: x <byte_count(expression)> <address(hex)>");
     return 0;
   };
-  word_t byte_count = atoi(arg_bc);
+  word_t byte_count = expr(arg_bc, success);
   // word_t address = strtol(arg_ad, NULL, 16);
-  word_t address = expr(arg_ad, &success);
+  word_t address = expr(arg_ad, success);
+  free(success);
   printf("XXXXXXXX");
   for (word_t i = 0; i < BYTE_PER_ROW; i++)
   {

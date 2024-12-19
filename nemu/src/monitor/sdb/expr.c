@@ -161,8 +161,7 @@ static void push_token(char *substr_start, int substr_len, int index) {
   return;
 }
 
-static word_t deal_double_operator(word_t left_half_val, 
-  word_t right_half_val, word_t master_position, bool *success);
+
 
 static bool make_token(char *e) {
   // this makes token from the input string `e`
@@ -304,6 +303,12 @@ bool check_single_operator(word_t p,word_t q) {
   } else return false;
 }
 
+static word_t deal_double_operator(word_t left_half_val, 
+  word_t right_half_val, word_t master_position, bool *success);
+
+static word_t deal_single_operator(word_t master_position, word_t rval, bool *success);
+
+
 word_t eval(word_t p, word_t q, bool* success) {
   if (*success == false) {
     return 0;
@@ -403,31 +408,10 @@ word_t eval(word_t p, word_t q, bool* success) {
   Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
 
   if (check_single_operator(master_position, -1)) {
-    switch (tokens[p].type){
-      case TK_DEREF:{
-        // get right value
-        word_t rval = eval(p + 1, q, success);
-        // derefrence
-        // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
-        //     panic("Invalid memory address for dereference");
-        // }
-        if (rval < 0x80000000 || rval > 0x87ffffff) {
-          Warn("Not a effective address.");
-          printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
-          *(success) = false;
-          return 0;
-        }
-        Log("Derefrencing address 0x%x\n", rval);
-        return paddr_read(rval, 1);
-        break;
-      }
-      default: {
-        Warn("NO SUCH OPREATOR! Something may went wrong with check single operator");
-        *success = false;
-        return 0;
-        break;
-      }
-    }
+    word_t rval = eval(p + 1, q, success);
+    word_t value = deal_single_operator(rval, master_position, success);
+    if(!(*success)) return 0;
+    return value;
   }
   word_t left_half_val = eval(p, master_position - 1, success);
   word_t right_half_val = eval(master_position + 1, q, success);
@@ -439,6 +423,34 @@ word_t eval(word_t p, word_t q, bool* success) {
   Warn("Not a recognized double operator!");
   *success = false;
   return 0;
+}
+
+static word_t deal_single_operator(word_t rval, word_t master_position, bool *success) {
+  word_t p = master_position;
+  switch (tokens[p].type){
+    case TK_DEREF:{
+      // get right value
+      // derefrence
+      // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
+      //     panic("Invalid memory address for dereference");
+      // }
+      if (rval < 0x80000000 || rval > 0x87ffffff) {
+        Warn("Not a effective address.");
+        printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
+        *(success) = false;
+        return 0;
+      }
+      Log("Derefrencing address 0x%x\n", rval);
+      return paddr_read(rval, 1);
+      break;
+    }
+    default: {
+      Warn("NO SUCH OPREATOR! Something may went wrong with check single operator");
+      *success = false;
+      return 0;
+      break;
+    }
+  }
 }
 
 static word_t deal_double_operator(word_t left_half_val, 

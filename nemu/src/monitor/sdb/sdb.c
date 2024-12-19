@@ -80,10 +80,10 @@ static int cmd_w(char *args) {
   Log("Expression: %s", x);
   WP* newWp = new_wp(args, success);
   // a->expr = "i love you";
-  printf("New watchpoint %d created\n", newWp->NO);
   if(!*success) {
       printf("Failed to create watchpoint\n");
   }
+  printf("New watchpoint %d created\n", newWp->NO);
   return 0;
 }
 

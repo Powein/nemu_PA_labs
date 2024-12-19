@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <cpu/cpu.h>
-#include "test.c"
+#include "mytest.h"
 
 void sdb_mainloop();
 
@@ -22,7 +22,9 @@ void engine_start() {
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
-  panic("==test==");
+#ifdef DEVELOP_TEST
+  mytest();
+#endif
   /* Receive commands from user. */
   sdb_mainloop();
 #endif

@@ -29,6 +29,7 @@ static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
 void init_wp_pool() {
+  if(head != NULL) return;
   Log("Initializing watchpoint pool.");
   int i;
   wp_pool[0].NO = 0;

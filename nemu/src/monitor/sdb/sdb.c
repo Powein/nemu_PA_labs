@@ -149,7 +149,7 @@ static int cmd_x(char *args) {
 
 static int cmd_go(char *args) {
   // test anything
-  init_wp_pool(); // init_wp_pool();
+  // init_wp_pool();
   bool* success = malloc(sizeof(bool));
   *success = true;
   int count = 0;
@@ -222,7 +222,7 @@ void sdb_set_batch_mode() {
 void sdb_mainloop() {
   // for test
   // generate_some_pointers();
-
+  // init_wp_pool();
   if (is_batch_mode) {
     cmd_c(NULL);
     return;

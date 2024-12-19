@@ -72,6 +72,13 @@ static int cmd_w(char *args) {
   // word_t is just like uint (4 bytes)
   word_t val = expr(args, success);
   printf("%d\n", val);
+  char* x = args;
+  WP* newWp = new_wp(x, success);
+  // a->expr = "i love you";
+  printf("New watchpoint %d created\n", newWp->NO);
+  if(!*success) {
+      printf("Failed to create watchpoint\n");
+  }
   return 0;
 }
 
@@ -90,7 +97,7 @@ static int cmd_info(char *args) {
     // Log("command : info r");
     isa_reg_display();
   } else if (strcmp(args, "w") == 0) {
-    // watchpoint_display();
+    watchpoint_display();
     panic("Not implemented");
   } else {
     printf("Usage: info r for reg, w for watchpoints\n");

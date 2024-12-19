@@ -84,3 +84,10 @@ void free_wp(WP *wp) {
   free_ = wp;
   return;
 }
+
+void watchpoint_display() {
+  for (word_t i = 0; i < NR_WP; i++) {
+    printf("Watchpoint %d, tracking expr: %s\n", i, wp_pool[i].expr);
+  }
+  return;
+}

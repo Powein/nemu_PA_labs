@@ -308,15 +308,17 @@ static word_t deal_double_operator(word_t left_half_val,
 
 static word_t deal_single_operator(word_t master_position, word_t rval, bool *success);
 
+static word_t deal_orpand(word_t p, bool*success);
+
+static word_t find_master_operator(word_t p, word_t q, bool *success);
 
 word_t eval(word_t p, word_t q, bool* success) {
-  if (*success == false) {
-    return 0;
-  };
   /* Get the evaluation of the expression from p to q.
    * q is included.
   */
-  int i = 0;
+  if (*success == false) {
+    return 0;
+  };
   if (tokens[p].type == TK_NOTYPE) {
     return eval(p + 1, q, success);
   }
@@ -331,36 +333,10 @@ word_t eval(word_t p, word_t q, bool* success) {
     return 0;
   }
   else if (p == q) {
-    /* Single token.
-     * For now this token should be a number.
-     * Return the value of the number.
-     */
-    wchar_t r = 0;
-    // decimal
-    switch (tokens[p].type) {
-      case TK_DECIMAL: {
-        r = strtoul(tokens[p].str, NULL, 10);
-        break;
-      }
-      case TK_HEX: {
-        r = strtoul(tokens[p].str, NULL, 16);
-        break;
-      }
-      case TK_REGISTER: {
-        r = isa_reg_str2val(tokens[p].str, success);
-        if(!(*success)) return 0;
-        return r;
-        break;
-      }
-      default: {
-        // panic("Internal Wrong, Can not get the evaluation of the expression!");
-        Warn("Not recognized token type when p == q. May add more numeric cases.");
-        *success = false;
-        return 0;
-      }
-    };
-    return r;
-    // hex
+    // It is a single token. number/ register
+    word_t value = deal_orpand(p, success);
+    if(!(*success)) return 0;
+    return value;
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -369,10 +345,32 @@ word_t eval(word_t p, word_t q, bool* success) {
     Log("remove parentheses at %u-%u", p, q);
     return eval(p + 1, q - 1, success);
   } 
-  /* We should do more things here. */
-
   // get the master operator, which is the one with the lowest priority
 
+  word_t master_position = find_master_operator(p, q, success);
+  if (!(*success)) return 0;
+
+  Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
+
+  if (check_single_operator(master_position, -1)) {
+    word_t rval = eval(p + 1, q, success);
+    word_t value = deal_single_operator(rval, master_position, success);
+    if(!(*success)) return 0;
+    return value;
+  }
+  word_t left_half_val = eval(p, master_position - 1, success);
+  word_t right_half_val = eval(master_position + 1, q, success);
+  word_t value = deal_double_operator(left_half_val, 
+    right_half_val, master_position, success);
+  if(!(*success)) return 0;
+  return value;
+  // panic("Unexpected error in eval");
+  Warn("Not a recognized double operator!");
+  *success = false;
+  return 0;
+}
+static word_t find_master_operator(word_t p, word_t q, bool *success) {
+  int i = 0;
   word_t lowest_priority = 0;
   word_t master_position = -1;
   // get the first lowest priority operator
@@ -400,30 +398,40 @@ word_t eval(word_t p, word_t q, bool* success) {
     }
   }
   if (master_position == -1) {
-
     Warn("No master operator found!");
     *success = false;
     return 0;
   }
-  Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
-
-  if (check_single_operator(master_position, -1)) {
-    word_t rval = eval(p + 1, q, success);
-    word_t value = deal_single_operator(rval, master_position, success);
-    if(!(*success)) return 0;
-    return value;
-  }
-  word_t left_half_val = eval(p, master_position - 1, success);
-  word_t right_half_val = eval(master_position + 1, q, success);
-  word_t value = deal_double_operator(left_half_val, 
-    right_half_val, master_position, success);
-  if(!(*success)) return 0;
-  return value;
-  // panic("Unexpected error in eval");
-  Warn("Not a recognized double operator!");
-  *success = false;
-  return 0;
+  return master_position;
 }
+
+static word_t deal_orpand(word_t p, bool*success){
+  word_t r = 0;
+  switch (tokens[p].type) {
+    case TK_DECIMAL: {
+      r = strtoul(tokens[p].str, NULL, 10);
+      break;
+    }
+    case TK_HEX: {
+      r = strtoul(tokens[p].str, NULL, 16);
+      break;
+    }
+    case TK_REGISTER: {
+      r = isa_reg_str2val(tokens[p].str, success);
+      if(!(*success)) return 0;
+      break;
+    }
+    default: {
+      // panic("Internal Wrong, Can not get the evaluation of the expression!");
+      Warn("Not recognized token type when p == q. May add more numeric cases.");
+      *success = false;
+      return 0;
+    }
+  }
+  return r;
+}
+
+
 
 static word_t deal_single_operator(word_t rval, word_t master_position, bool *success) {
   word_t p = master_position;

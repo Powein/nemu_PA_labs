@@ -155,6 +155,7 @@ static int cmd_go(char *args) {
   int count = 0;
   while(true){
     WP* a = new_wp("aaa", success);
+    Log("Created %d watchpoints", count);
     a->expr = "i love you";
     count++;
     if(!*success) {
@@ -162,7 +163,6 @@ static int cmd_go(char *args) {
         break;
       }
   }
-  Log("Created %d watchpoints", count);
   return 0;
 }
 

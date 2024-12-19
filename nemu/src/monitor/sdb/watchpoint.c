@@ -59,10 +59,10 @@ WP* new_wp(char* e ,bool* success) {
   Log("Adding new watch point");
   for (word_t i = 0; i < NR_WP + 1; i++)
   {
-    Log("Checking wp at %d", i);
+    // Log("Checking wp at %d", i);
     info_wp(&wp_pool[i]);
     if(free_-> vacant == true) {
-      Log("Find a vacant wp in poop: %d", free_->NO);
+      Log("Find a vacant wp in pool: %d", free_->NO);
       free_ -> expr = e;
       free_-> vacant = false;
       *success = true;

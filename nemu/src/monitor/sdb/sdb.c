@@ -66,6 +66,10 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
   // panic("Not implemnted");
+  if(args == NULL) {
+    printf("Usage: w <expr>\n");
+    return 0;
+  }
   Warn("Working in progress");
   bool suc = true;
   bool *success = & suc;

@@ -1,9 +1,9 @@
 #include<stdio.h>
-#ifndef DEVELOP_TEST
-#define DEVELOP_TEST
-#endif
-
+#include<memory/vaddr.h>
+// word_t vaddr_ifetch(vaddr_t addr, int len);
+// word_t vaddr_read(vaddr_t addr, int len);
+// void vaddr_write(vaddr_t addr, int len, word_t data);
 void mytest() {
-    // panic("==test==");
-    printf("I love you");
+    word_t a = vaddr_ifetch(0x80000000, 4);
+    Warn("mytest: 0x%08x\n", a);
 }

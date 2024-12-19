@@ -154,6 +154,7 @@ static int cmd_go(char *args) {
   *success = true;
   int count = 0;
   while(true){
+    *success = true;
     char* x = "aaa";
     WP* a = new_wp(x, success);
     Log("Created watchpoints %d", count);

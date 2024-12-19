@@ -161,7 +161,8 @@ static void push_token(char *substr_start, int substr_len, int index) {
   return;
 }
 
-
+static word_t deal_double_operator(word_t left_half_val, 
+  word_t right_half_val, word_t master_position, bool *success);
 
 static bool make_token(char *e) {
   // this makes token from the input string `e`
@@ -363,116 +364,125 @@ word_t eval(word_t p, word_t q, bool* success) {
     Log("remove parentheses at %u-%u", p, q);
     return eval(p + 1, q - 1, success);
   } 
-    /* We should do more things here. */
+  /* We should do more things here. */
 
-    // get the master operator, which is the one with the lowest priority
+  // get the master operator, which is the one with the lowest priority
 
-    word_t lowest_priority = 0;
-    word_t master_position = -1;
-    // get the first lowest priority operator
-    word_t flag = 0;
-    for (i = p; i < q + 1; i++)
-    {
-      if(tokens[i].type == TK_NOTYPE) {
-        continue;
-      }
-      if(tokens[i].type == TK_LEFT_P) {
-        flag = flag + 1;
-        continue;
-      }
-      if(tokens[i].type == TK_RIGHT_P) {
-        flag = flag - 1;
-        continue;
-      }
-      if(flag > 0) {
-        continue;
-      }
-      word_t current_priority = get_priority(tokens[i]);
-      if(lowest_priority < current_priority) {
-        lowest_priority = current_priority;
-        master_position = i;
-      }
+  word_t lowest_priority = 0;
+  word_t master_position = -1;
+  // get the first lowest priority operator
+  word_t flag = 0;
+  for (i = p; i < q + 1; i++)
+  {
+    if(tokens[i].type == TK_NOTYPE) {
+      continue;
     }
-    if (master_position == -1) {
-      // panic("what the fuck? No master operator found");
-      Warn("No master operator found!");
-      *success = false;
-      return 0;
+    if(tokens[i].type == TK_LEFT_P) {
+      flag = flag + 1;
+      continue;
     }
-    Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
-    // leftpart and rightpart, eval them
-    if (check_single_operator(master_position, -1)) {
-      switch (tokens[p].type){
-        case TK_DEREF:{
-          // get right value
-          word_t rval = eval(p + 1, q, success);
-          // derefrence
-          // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
-          //     panic("Invalid memory address for dereference");
-          // }
-          if (rval < 0x80000000 || rval > 0x87ffffff) {
-            Warn("Not a effective address.");
-            printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
-            *(success) = false;
-            return 0;
-          }
-          Log("Derefrencing address 0x%x\n", rval);
-          return paddr_read(rval, 1);
-          break;
-        }
-        default: {
-          Warn("NO SUCH OPREATOR! Something may went wrong with check single operator");
-          *success = false;
+    if(tokens[i].type == TK_RIGHT_P) {
+      flag = flag - 1;
+      continue;
+    }
+    if(flag > 0) {
+      continue;
+    }
+    word_t current_priority = get_priority(tokens[i]);
+    if(lowest_priority < current_priority) {
+      lowest_priority = current_priority;
+      master_position = i;
+    }
+  }
+  if (master_position == -1) {
+
+    Warn("No master operator found!");
+    *success = false;
+    return 0;
+  }
+  Log("Master operator found at %d : %s", master_position, tokens[master_position].str);
+
+  if (check_single_operator(master_position, -1)) {
+    switch (tokens[p].type){
+      case TK_DEREF:{
+        // get right value
+        word_t rval = eval(p + 1, q, success);
+        // derefrence
+        // if (rval == 0 || (uintptr_t)rval % sizeof(word_t) != 0) {
+        //     panic("Invalid memory address for dereference");
+        // }
+        if (rval < 0x80000000 || rval > 0x87ffffff) {
+          Warn("Not a effective address.");
+          printf("Invalid address. Use effective addr: [0x80000000, 0x87ffffff]\n");
+          *(success) = false;
           return 0;
-          break;
         }
+        Log("Derefrencing address 0x%x\n", rval);
+        return paddr_read(rval, 1);
+        break;
+      }
+      default: {
+        Warn("NO SUCH OPREATOR! Something may went wrong with check single operator");
+        *success = false;
+        return 0;
+        break;
       }
     }
-    word_t left_half_val = eval(p, master_position - 1, success);
-    word_t right_half_val = eval(master_position + 1, q, success);
-    switch (tokens[master_position].type) {
-      case TK_ADD:{
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val + right_half_val;
-      };
-      case TK_SUB:{
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val - right_half_val;
-      }
-      case TK_MUL:{
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val * right_half_val;
-      }
-      case TK_DIV:{
-        Log("Opreator found %s", tokens[master_position].str);
-        if (right_half_val == 0) {
-          panic("Division by zero");
-        }
-        return left_half_val / right_half_val;
-      }
-      case TK_AND: {
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val && right_half_val;
-      }
-      case TK_OR: {
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val || right_half_val;
-      }
-      case TK_EQ: {
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val == right_half_val;
-      }
-      case TK_NEQ: {
-        Log("Opreator found %s", tokens[master_position].str);
-        return left_half_val != right_half_val;
-      }
-      default:
-        Log("Unrecognized operator %s", tokens[master_position].str);
-    }
-  
+  }
+  word_t left_half_val = eval(p, master_position - 1, success);
+  word_t right_half_val = eval(master_position + 1, q, success);
+  word_t value = deal_double_operator(left_half_val, 
+    right_half_val, master_position, success);
+  if(!(*success)) return 0;
+  return value;
   // panic("Unexpected error in eval");
   Warn("Not a recognized double operator!");
   *success = false;
   return 0;
 }
 
+static word_t deal_double_operator(word_t left_half_val, 
+  word_t right_half_val, word_t master_position, bool *success) {
+
+  switch (tokens[master_position].type) {
+    case TK_ADD:{
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val + right_half_val;
+    };
+    case TK_SUB:{
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val - right_half_val;
+    }
+    case TK_MUL:{
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val * right_half_val;
+    }
+    case TK_DIV:{
+      Log("Opreator found %s", tokens[master_position].str);
+      if (right_half_val == 0) {
+        panic("Division by zero");
+      }
+      return left_half_val / right_half_val;
+    }
+    case TK_AND: {
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val && right_half_val;
+    }
+    case TK_OR: {
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val || right_half_val;
+    }
+    case TK_EQ: {
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val == right_half_val;
+    }
+    case TK_NEQ: {
+      Log("Opreator found %s", tokens[master_position].str);
+      return left_half_val != right_half_val;
+    }
+    default:
+      Log("Unrecognized operator %s", tokens[master_position].str);
+      *success = false;
+  }
+  return 0;
+}

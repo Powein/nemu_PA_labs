@@ -15,7 +15,7 @@
 
 #ifndef __SDB_H__
 #define __SDB_H__
-
+#define MAX_EXPR_LEN 64
 #include <common.h>
 
 // See expr.c. token are used to store the tokens of the expression.
@@ -35,7 +35,7 @@ word_t expr(char *e, bool *success);
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char* expr;
+  char expr[MAX_EXPR_LEN];
   bool vacant;
   /* TODO: Add more members if necessary */
 

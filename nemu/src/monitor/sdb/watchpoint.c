@@ -74,6 +74,7 @@ WP* new_wp(char* e ,bool* success) {
       free_ = wp_pool;
     }
   }
+  Log("No vacant watch point in pool. Returning NULL");
   *success = false;
   return NULL;
 }

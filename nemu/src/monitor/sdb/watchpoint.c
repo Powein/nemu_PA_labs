@@ -78,11 +78,15 @@ WP* new_wp(char* e ,bool* success) {
   return NULL;
 }
 
-void free_wp(WP *wp) {
+void free_wp(int wpNO, bool* success) {
   // make that place vacant for next allocation
-  Log("Freeing watch point %d", wp->NO);
-  wp->vacant = true;
-  free_ = wp;
+  Log("Freeing watch point %d", wpNO);
+  if(wpNO < 0 || wpNO >= NR_WP) {
+    *success = false;
+    return;
+  }
+  wp_pool[wpNO].vacant = true;
+  free_ = &wp_pool[wpNO];
   return;
 }
 

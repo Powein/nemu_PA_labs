@@ -187,6 +187,18 @@ static int cmd_go(char *args) {
   return 0;
 }
 
+static int cmd_d(char* args) {
+  bool suc = true;
+  word_t deleteNum = atoi(args);
+  free_wp(deleteNum, &suc);
+  if(!suc) {
+    printf("Watchpoint %d does not exists\n", deleteNum);
+    return 0;
+  }
+  printf("Watchpoint %d deleted\n", deleteNum);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -204,6 +216,7 @@ static struct {
   { "x", "Examine memory", cmd_x},
   { "w", "Create a watchpoint", cmd_w},
   { "go", "test", cmd_go},
+  { "d", "Delete a watchpoint by watchpoint number", cmd_d},
   // { "d", "Delete a watchpoint", cmd_d},
 
   /* TODO: Add more commands */

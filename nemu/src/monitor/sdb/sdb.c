@@ -65,7 +65,13 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-  panic("Not implemnted");
+  // panic("Not implemnted");
+  Warn("Working in progress");
+  bool suc = true;
+  bool *success = & suc;
+  // word_t is just like uint (4 bytes)
+  word_t val = expr(args, success);
+  printf("%d\n", val);
   return 0;
 }
 
@@ -184,6 +190,7 @@ static struct {
   { "si", "Take a single step of the program", cmd_si},
   { "info", "Display the status of the program", cmd_info},
   { "x", "Examine memory", cmd_x},
+  { "w", "Create a watchpoint", cmd_w},
   { "go", "test", cmd_go},
   // { "d", "Delete a watchpoint", cmd_d},
 

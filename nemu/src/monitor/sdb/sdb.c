@@ -98,7 +98,7 @@ static int cmd_info(char *args) {
     isa_reg_display();
   } else if (strcmp(args, "w") == 0) {
     watchpoint_display();
-    panic("Not implemented");
+    // panic("Not implemented");
   } else {
     printf("Usage: info r for reg, w for watchpoints\n");
   }

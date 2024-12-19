@@ -70,7 +70,6 @@ static int cmd_w(char *args) {
     printf("Usage: w <expr>\n");
     return 0;
   }
-  Warn("Working in progress");
   bool suc = true;
   bool *success = & suc;
   // word_t is just like uint (4 bytes)

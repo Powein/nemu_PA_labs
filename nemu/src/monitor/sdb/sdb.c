@@ -82,6 +82,7 @@ static int cmd_w(char *args) {
   // a->expr = "i love you";
   if(!*success) {
       printf("Failed to create watchpoint\n");
+      return 0;
   }
   printf("New watchpoint %d created\n", newWp->NO);
   return 0;

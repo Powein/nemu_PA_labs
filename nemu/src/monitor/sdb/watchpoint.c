@@ -79,6 +79,7 @@ WP* new_wp(char* e ,bool* success) {
 }
 
 void free_wp(WP *wp) {
+  // make that place vacant for next allocation
   Log("Freeing watch point %d", wp->NO);
   wp->vacant = true;
   free_ = wp;

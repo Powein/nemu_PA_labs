@@ -27,6 +27,8 @@
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
+static bool toggle = true;
+
 
 void init_wp_pool() {
   if(head != NULL) return;
@@ -99,4 +101,29 @@ void watchpoint_display() {
     printf("Watchpoint %d, tracking expr: %s\n", i, wp_pool[i].expr);
   }
   return;
+}
+
+void check_watchpoint() {
+  // check watchpoint here
+  bool success = true;
+  for (word_t i = 0; i < NR_WP; i++)
+  {
+    if(wp_pool[i].vacant) {
+      continue;
+    }
+    // this may cost some extra time
+    word_t value = expr(wp_pool[i].expr, &success);
+    if(!success) {
+      panic("HALT: Unexpected error when checking watchpoint: unexpected modification on expr!");
+    }
+    if (wp_pool[i].last_value == value) {
+      continue;
+    }
+    wp_pool[i].last_value = value;
+    printf("WP %d: %s is now %d\n", i, wp_pool[i].expr, value);
+  }
+  
+}
+void toggle_wp(bool target_status) {
+  toggle = target_status;
 }

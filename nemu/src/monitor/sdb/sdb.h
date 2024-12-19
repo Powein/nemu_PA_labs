@@ -37,11 +37,13 @@ typedef struct watchpoint {
   struct watchpoint *next;
   char expr[MAX_EXPR_LEN];
   bool vacant;
+  word_t last_value; // the last value of the expression
   /* TODO: Add more members if necessary */
 
 } WP;
 WP* new_wp(char* e ,bool* success);
 void watchpoint_display();
 void free_wp(int wpNO, bool* success);
-
+void check_watchpoint();
+void toggle_wp(bool target_status);
 #endif

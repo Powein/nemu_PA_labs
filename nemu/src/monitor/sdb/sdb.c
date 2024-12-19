@@ -66,6 +66,7 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
   // panic("Not implemnted");
+  word_t value;
   if(args == NULL) {
     printf("Usage: w <expr>\n");
     return 0;
@@ -73,7 +74,7 @@ static int cmd_w(char *args) {
   bool suc = true;
   bool *success = & suc;
   // word_t is just like uint (4 bytes)
-  expr(args, success);
+  value = expr(args, success);
   if(!*success) {
     printf("Invalid expression. Watchpoint is not added.\n");
     return 0;
@@ -87,6 +88,7 @@ static int cmd_w(char *args) {
       printf("Failed to create watchpoint\n");
       return 0;
   }
+  newWp->last_value = value;
   printf("New watchpoint %d created\n", newWp->NO);
   return 0;
 }

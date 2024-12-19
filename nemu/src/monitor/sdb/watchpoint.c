@@ -48,11 +48,11 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 static void info_wp(WP* wp) {
-  Log("=+=+=+=+=");
-  Log("Watchpoint NO: %d", wp->NO);
-  Log("Watchpoint value: %s", wp->expr);
-  Log("Watchpoint vacant: %d", wp->vacant);
-  Log("=+=+=+=+=");
+  // Log("=+=+=+=+=");
+  // Log("Watchpoint NO: %d", wp->NO);
+  // Log("Watchpoint value: %s", wp->expr);
+  // Log("Watchpoint vacant: %d", wp->vacant);
+  // Log("=+=+=+=+=");
 }
 
 WP* new_wp(char* e ,bool* success) {

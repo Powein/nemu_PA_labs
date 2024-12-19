@@ -56,7 +56,7 @@ static void info_wp(WP* wp) {
 }
 
 WP* new_wp(char* e ,bool* success) {
-  Log("Adding new watch point, expr = %s",e );
+  Log("Adding new watch point, expr = %s",e);
   for (word_t i = 0; i < NR_WP + 1; i++)
   {
     // Log("Checking wp at %d", i);

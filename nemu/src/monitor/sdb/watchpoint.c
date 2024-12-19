@@ -50,6 +50,7 @@ WP* new_wp(char* e ,bool* success) {
   for (size_t i = 0; i < NR_WP + 1; i++)
   {
     if(free_-> vacant) {
+      Log("Find a vacant wp in poop: %d", free_->NO);
       free_ -> expr = e;
       free_-> vacant = false;
       *success = true;

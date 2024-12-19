@@ -34,6 +34,7 @@ void init_wp_pool() {
   int i;
   wp_pool[0].NO = 0;
   wp_pool[0].next = &wp_pool[1];
+  wp_pool[0].vacant = true;
   head = wp_pool;
   for (i = 1; i < NR_WP; i ++) { 
     wp_pool[i].NO = i;
@@ -51,7 +52,7 @@ WP* new_wp(char* e ,bool* success) {
   for (word_t i = 0; i < NR_WP + 1; i++)
   {
     Log("Checking wp at %d", i);
-    if(free_-> vacant) {
+    if(free_-> vacant == true) {
       Log("Find a vacant wp in poop: %d", free_->NO);
       free_ -> expr = e;
       free_-> vacant = false;

@@ -193,7 +193,16 @@ static int cmd_go(char *args) {
 }
 
 static int cmd_d(char* args) {
+  if(args == NULL) {
+    printf("Usage: d <watchpoint Number(expr)>\n");
+    return 0;
+  }
   bool suc = true;
+  expr(args, &suc);
+  if(!suc) {
+    printf("Invalid expression!\n");
+    return 0;
+  }
   word_t deleteNum = atoi(args);
   free_wp(deleteNum, &suc);
   if(!suc) {

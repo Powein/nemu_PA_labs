@@ -70,9 +70,14 @@ static int cmd_w(char *args) {
   bool suc = true;
   bool *success = & suc;
   // word_t is just like uint (4 bytes)
-  word_t val = expr(args, success);
-  printf("%d\n", val);
+  expr(args, success);
+  if(!*success) {
+    printf("Invalid expression. Watchpoint is not added.\n");
+    return 0;
+  }
+  // printf("%d\n", val);
   char* x = args;
+  Log("Expression: %s", x);
   WP* newWp = new_wp(x, success);
   // a->expr = "i love you";
   printf("New watchpoint %d created\n", newWp->NO);

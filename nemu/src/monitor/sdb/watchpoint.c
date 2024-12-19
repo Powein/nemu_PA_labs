@@ -105,6 +105,9 @@ void watchpoint_display() {
 
 void check_watchpoint() {
   // check watchpoint here
+  if(!toggle) {
+    return;
+  }
   bool success = true;
   for (word_t i = 0; i < NR_WP; i++)
   {
@@ -125,5 +128,10 @@ void check_watchpoint() {
   
 }
 void toggle_wp(bool target_status) {
+  if(!target_status) {
+    Log("Watchpoint disabled");
+  } else {
+    Log("Watchpoint enabled");
+  }
   toggle = target_status;
 }

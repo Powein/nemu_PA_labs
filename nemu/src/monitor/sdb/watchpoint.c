@@ -40,6 +40,7 @@ void init_wp_pool() {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
     wp_pool[i].vacant = true;
+    Log("Initializing watchpoint %d, vacant = %d", i, wp_pool[i].vacant);
   }
   free_ = wp_pool; // set free to the first element
   Log("Watchpoint pool initialized. free_ = %p, head = %p", free_, head);

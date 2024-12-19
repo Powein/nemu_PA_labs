@@ -157,7 +157,8 @@ static int cmd_go(char *args) {
     char* x = "aaa";
     WP* a = new_wp(x, success);
     Log("Created watchpoints %d", count);
-    a->expr = "i love you";
+    printf("address of the watchpoint is %p",a);
+    // a->expr = "i love you";
     count++;
     if(!*success) {
         printf("Failed to create watchpoint\n");

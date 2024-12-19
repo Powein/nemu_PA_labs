@@ -125,7 +125,6 @@ void check_watchpoint() {
     wp_pool[i].last_value = value;
     printf("WP %d: %s is now %d\n", i, wp_pool[i].expr, value);
   }
-  
 }
 void toggle_wp(bool target_status) {
   if(!target_status) {

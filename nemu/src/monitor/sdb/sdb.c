@@ -78,7 +78,7 @@ static int cmd_w(char *args) {
   // printf("%d\n", val);
   char* x = args;
   Log("Expression: %s", x);
-  WP* newWp = new_wp(x, success);
+  WP* newWp = new_wp(args, success);
   // a->expr = "i love you";
   printf("New watchpoint %d created\n", newWp->NO);
   if(!*success) {

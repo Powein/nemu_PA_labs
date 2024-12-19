@@ -150,6 +150,19 @@ static int cmd_x(char *args) {
 static int cmd_go(char *args) {
   // test anything
   init_wp_pool(); // init_wp_pool();
+  bool* success = malloc(sizeof(bool));
+  *success = true;
+  int count = 0;
+  while(true){
+    WP* a = new_wp("aaa", success);
+    a->expr = "i love you";
+    count++;
+    if(!*success) {
+        printf("Failed to create watchpoint\n");
+        break;
+      }
+  }
+  Log("Created %d watchpoints", count);
   return 0;
 }
 static int cmd_help(char *args);

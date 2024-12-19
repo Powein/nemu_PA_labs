@@ -18,6 +18,28 @@
 
 #include <common.h>
 
+// See expr.c. token are used to store the tokens of the expression.
+// Saving token will make it quicker to evaluate the expression.
+// may do this later
+// we have not hit the limit yet
+// remember to make eval accecpt tokens as a parameter when we do that optimization
+
+// typedef struct token {
+//   int type;
+//   char str[32];
+// } Token;
+
+// get a value from a string expression
 word_t expr(char *e, bool *success);
+// word_t eval;
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+  char* expr;
+  /* TODO: Add more members if necessary */
+
+} WP;
+WP* new_wp(char* e ,bool* success);
+void free_wp(WP *wp);
 
 #endif

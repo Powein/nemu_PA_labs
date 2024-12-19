@@ -165,6 +165,7 @@ static int cmd_go(char *args) {
   Log("Created %d watchpoints", count);
   return 0;
 }
+
 static int cmd_help(char *args);
 
 static struct {

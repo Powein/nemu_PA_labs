@@ -36,6 +36,7 @@ typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
   char* expr;
+  bool vacant;
   /* TODO: Add more members if necessary */
 
 } WP;

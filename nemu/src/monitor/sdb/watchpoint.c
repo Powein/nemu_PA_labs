@@ -31,12 +31,13 @@ static WP *head = NULL, *free_ = NULL;
 void init_wp_pool() {
   Log("Initializing watchpoint pool.");
   int i;
-  for (i = 0; i < NR_WP; i ++) {
+  wp_pool[0].NO = 0;
+  wp_pool[0].next = &wp_pool[1];
+  head = wp_pool;
+  for (i = 1; i < NR_WP; i ++) { 
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
   }
-
-  head = NULL;
   free_ = wp_pool; // set free to the first element
 }
 
@@ -44,16 +45,26 @@ void init_wp_pool() {
 
 WP* new_wp(char* e ,bool* success) {
   Log("Adding new watch point");
-  if (free_ == NULL) {
-    *success = false;
-    return NULL;
+  for (size_t i = 0; i < NR_WP + 1; i++)
+  {
+    if(free_-> vacant) {
+      free_-> vacant = false;
+      *success = true;
+      return free_;
+    }
+    if(free_->next != NULL) {
+      free_ = free_->next;
+    } else {
+      free_ = wp_pool;
+    }
   }
-  WP* free_wp = free_;
-  free_ = free_->next;
-  return free_wp;
+  *success = false;
+  return NULL;
 }
 
 void free_wp(WP *wp) {
-  free(wp);
+  Log("Freeing watch point %d", wp->NO);
+  wp->vacant = true;
+  free_ = wp;
   return;
 }

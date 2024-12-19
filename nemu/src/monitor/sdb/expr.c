@@ -314,8 +314,7 @@ static word_t find_master_operator(word_t p, word_t q, bool *success);
 
 word_t eval(word_t p, word_t q, bool* success) {
   /* Get the evaluation of the expression from p to q.
-   * q is included.
-  */
+   * q is included.*/
   if (*success == false) {
     return 0;
   };
@@ -327,7 +326,6 @@ word_t eval(word_t p, word_t q, bool* success) {
   }
   if (p > q) {
     Log("Invalid expression provided: left is greater than right");
-    // panic("Internal Wrong, Can not get the evaluation of the expression!");
     Warn("Invalid expression provided!");
     *success = false;
     return 0;
@@ -358,17 +356,18 @@ word_t eval(word_t p, word_t q, bool* success) {
     if(!(*success)) return 0;
     return value;
   }
+
   word_t left_half_val = eval(p, master_position - 1, success);
   word_t right_half_val = eval(master_position + 1, q, success);
   word_t value = deal_double_operator(left_half_val, 
     right_half_val, master_position, success);
   if(!(*success)) return 0;
   return value;
-  // panic("Unexpected error in eval");
   Warn("Not a recognized double operator!");
   *success = false;
   return 0;
 }
+
 static word_t find_master_operator(word_t p, word_t q, bool *success) {
   int i = 0;
   word_t lowest_priority = 0;

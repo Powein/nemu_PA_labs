@@ -47,8 +47,9 @@ void init_wp_pool() {
 
 WP* new_wp(char* e ,bool* success) {
   Log("Adding new watch point");
-  for (size_t i = 0; i < NR_WP + 1; i++)
+  for (word_t i = 0; i < NR_WP + 1; i++)
   {
+    Log("Checking wp at %d", i);
     if(free_-> vacant) {
       Log("Find a vacant wp in poop: %d", free_->NO);
       free_ -> expr = e;

@@ -24,9 +24,13 @@
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
-  TYPE_N, // none
+  TYPE_N, TYPE_R, TYPE_J,
+  TYPE_B// none
 };
 
+
+// set the immidate through macro definition
+// all the influence to the registers are done there
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
@@ -35,6 +39,7 @@ enum {
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
+  // the rs field are fixed to these five bits
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
@@ -42,6 +47,16 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
+/*
+31      25 24       20 19        15 14         12 11          7 6     0
++--------+-----------+------------+-------------+--------------+-------+
+| funct7 |    rs2    |     rs1    |   funct3    |      rd      | opcode|
++--------+-----------+------------+-------------+--------------+-------+
+*/  // all the shits are from register, so do not do anything to imm
+    case TYPE_R: src1R(); src2R();       ;break;
+
+    case TYPE_B: break;
+    case TYPE_J: break;
     case TYPE_N: break;
     default: panic("unsupported type = %d", type);
   }
@@ -57,27 +72,6 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
-/*make this run
-80000000 <_start>:
-80000000:	00000413          	li	s0,0
-80000004:	00009117          	auipc	sp,0x9
-80000008:	ffc10113          	addi	sp,sp,-4 # 80009000 <_end>
-8000000c:	00c000ef          	jal	80000018 <_trm_init>
-
-80000010 <main>:
-80000010:	00000513          	li	a0,0
-80000014:	00008067          	ret
-
-80000018 <_trm_init>:
-80000018:	ff010113          	addi	sp,sp,-16
-8000001c:	00000517          	auipc	a0,0x0
-80000020:	01c50513          	addi	a0,a0,28 # 80000038 <_etext>
-80000024:	00112623          	sw	ra,12(sp)
-80000028:	fe9ff0ef          	jal	80000010 <main>
-8000002c:	00050513          	mv	a0,a0
-80000030:	00100073          	ebreak
-80000034:	0000006f          	j	80000034 <_trm_init+0x1c>
-*/
   INSTPAT_START();
   //INSTPAT(模式字符串, 指令名称, 指令类型, 指令执行操作);
   // 这个指令类型会被macro concat成TYPE_指令类型
@@ -88,10 +82,36 @@ static int decode_exec(Decode *s) {
   // R(i) is register i
   //void vaddr_write(vaddr_t addr, int len, word_t data);
   // Mw: write to addr, len(bytes), data
+  
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = s->pc + imm);
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, src2));
-  
+  // my instructions
+  INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(rd) = imm << 12);
+  INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(rd) = src1 + imm);
+  // INSTPAT("", jal,  );
+  // INSTPAT("", li,  );
+  // INSTPAT("", ret,  );
+  // INSTPAT("", sw,  );
+// 80000000 <_start>:
+// 80000000:	00000413          	li	s0,0
+// 80000004:	00009117          	auipc	sp,0x9
+// 80000008:	ffc10113          	addi	sp,sp,-4 # 80009000 <_end>
+// 8000000c:	00c000ef          	jal	80000018 <_trm_init>
+
+// 80000010 <main>:
+// 80000010:	00000513          	li	a0,0
+// 80000014:	00008067          	ret
+//   80000018 <_trm_init>:
+// 80000018:	ff010113          	addi	sp,sp,-16
+// 8000001c:	00000517          	auipc	a0,0x0
+// 80000020:	01c50513          	addi	a0,a0,28 # 80000038 <_etext>
+// 80000024:	00112623          	sw	ra,12(sp)
+// 80000028:	fe9ff0ef          	jal	80000010 <main>
+// 8000002c:	00050513          	mv	a0,a0
+// 80000030:	00100073          	ebreak
+// 80000034:	0000006f          	j	80000034 <_trm_init+0x1c>
+  // INSTPAT("");
 
 
 

@@ -49,12 +49,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
-/*
-31      25 24       20 19        15 14         12 11          7 6     0
-+--------+-----------+------------+-------------+--------------+-------+
-| funct7 |    rs2    |     rs1    |   funct3    |      rd      | opcode|
-+--------+-----------+------------+-------------+--------------+-------+
-*/  // all the shits are from register, so do not do anything to imm
+    // all the shits are from register, so do not do anything to imm
     case TYPE_R: src1R(); src2R();          break;
   /*B-type指令操作由7bit的opcode、3位的func3来决定；指令中包含两个源寄存器（rs1，rs2）与一个12位立即数，
   B-typed 一般表示条件跳转操作指令（分支指令），如相等(beq)、不相等(bne)、大于等于(bge)以及小于(blt)等跳
@@ -65,7 +60,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_J: immJ();                    break;
     // case TYPE_N: break;
     default: 
-    // panic("unsupported type = %d", type);
+    panic("unsupported type = %d", type);
   }
 }
 

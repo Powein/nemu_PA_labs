@@ -58,7 +58,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     /*J-type指令操作仅由7位opcode决定，与U-type一样只有一个目的寄存器rd和20位的立即数，但是立即数的位域
     与U-type的组成不同，J-type一般用于无条件跳转，如jal指令，RV32I一共有1条J-type指令。*/
     case TYPE_J: immJ();                    break;
-    // case TYPE_N: break;
+    case TYPE_N: break;
     default: 
     panic("unsupported type = %d", type);
   }

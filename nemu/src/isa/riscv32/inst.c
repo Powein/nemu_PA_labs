@@ -36,7 +36,9 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
-
+// my definitions for imm
+#define immB() do { *imm = (SEXT(BITS(i, 31, 31), 1)) << 10 | BITS(i, 7, 7) << 9 | BITS(i, 30, 25) << 4 | BITS(i, 11, 8); } while(0)
+#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) << 18 | BITS(i,19,12) << 9 | BITS(i,20,20) << 8 | BITS(i,30,21); } while(0)
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
   // the rs field are fixed to these five bits
@@ -53,11 +55,15 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 | funct7 |    rs2    |     rs1    |   funct3    |      rd      | opcode|
 +--------+-----------+------------+-------------+--------------+-------+
 */  // all the shits are from register, so do not do anything to imm
-    case TYPE_R: src1R(); src2R();       ;break;
-
-    case TYPE_B: break;
-    case TYPE_J: break;
-    case TYPE_N: break;
+    case TYPE_R: src1R(); src2R();          break;
+  /*B-type指令操作由7bit的opcode、3位的func3来决定；指令中包含两个源寄存器（rs1，rs2）与一个12位立即数，
+  B-typed 一般表示条件跳转操作指令（分支指令），如相等(beq)、不相等(bne)、大于等于(bge)以及小于(blt)等跳
+  转指令。*/
+    case TYPE_B: src1R(); src2R(); immB();  break;
+    /*J-type指令操作仅由7位opcode决定，与U-type一样只有一个目的寄存器rd和20位的立即数，但是立即数的位域
+    与U-type的组成不同，J-type一般用于无条件跳转，如jal指令，RV32I一共有1条J-type指令。*/
+    case TYPE_J: immJ();                    break;
+    // case TYPE_N: break;
     default: panic("unsupported type = %d", type);
   }
 }

@@ -18,7 +18,7 @@
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
 #include <memory/vaddr.h>
-
+#include <utils.h>
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
@@ -139,7 +139,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("?????? ?????? ????? 101 ????? 00000 11", lhu    , I, R(rd) = vaddr_ifetch(src1 + (sword_t)imm, 2));
   INSTPAT("?????? ?????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->pc; s->dnpc = src1 + (sword_t)imm);
   INSTPAT("000000 000000 00000 000 00000 11100 11", ecall  , I, panic("ecall not implemented"));
-  INSTPAT("000000 000001 00000 000 00000 11100 11", ebreak , I, Warn("Ebreak not implemented"););
+  INSTPAT("000000 000001 00000 000 00000 11100 11", ebreak , I, nemu_state.state = NEMU_END;);
   // INSTPAT("", jal,  );
   // INSTPAT("", li,  );
   // INSTPAT("", ret,  );

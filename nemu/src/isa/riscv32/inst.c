@@ -64,7 +64,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     与U-type的组成不同，J-type一般用于无条件跳转，如jal指令，RV32I一共有1条J-type指令。*/
     case TYPE_J: immJ();                    break;
     // case TYPE_N: break;
-    default: panic("unsupported type = %d", type);
+    default: 
+    // panic("unsupported type = %d", type);
   }
 }
 

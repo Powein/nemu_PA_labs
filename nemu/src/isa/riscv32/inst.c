@@ -28,7 +28,9 @@ enum {
   TYPE_N, TYPE_R, TYPE_J,
   TYPE_B// none
 };
-
+void align(word_t* x) {
+  *x = (*x + 3) & ~3;
+}
 
 // set the immidate through macro definition
 // all the influence to the registers are done there
@@ -178,6 +180,7 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
+  align(&s->dnpc);
   Log("snpc: %x, dnpc:%x", s->snpc, s->dnpc);
   return 0;
 }

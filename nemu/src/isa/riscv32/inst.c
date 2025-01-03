@@ -139,6 +139,17 @@ static int decode_exec(Decode *s) {
   INSTPAT("?????? ?????? ????? 101 ????? 00000 11", lhu    , I, R(rd) = vaddr_ifetch(src1 + (sword_t)imm, 2));
   INSTPAT("?????? ?????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->pc; s->dnpc = src1 + (sword_t)imm);
   INSTPAT("000000 000000 00000 000 00000 11100 11", ecall  , I, panic("ecall not implemented"));
+
+  // my S series
+  INSTPAT("?????? ?????? ????? 000 ????? 01000 11", sb     , S, panic("sb not implemented"));
+  INSTPAT("?????? ?????? ????? 001 ????? 01000 11", sh     , S, panic("sh not implemented"));
+  INSTPAT("?????? ?????? ????? 010 ????? 01000 11", sw     , S, panic("sw not implemented"));
+  // my B series
+  
+  // my J series
+  
+
+
   // INSTPAT("000000 000001 00000 000 00000 11100 11", ebreak , I, nemu_state.state = NEMU_END;);
   // INSTPAT("", jal,  );
   // INSTPAT("", li,  );
@@ -148,7 +159,7 @@ static int decode_exec(Decode *s) {
 // 80000000:	00000413          	li	s0,0
 // 80000004:	00009117          	auipc	sp,0x9
 // 80000008:	ffc10113          	addi	sp,sp,-4 # 80009000 <_end>
-// 8000000c:	00c000ef          	jal	80000018 <_trm_init>
+// 8000000c:	00c000ef          	jal	80000018 <_trm_init> 
 
 // 80000010 <main>:
 // 80000010:	00000513          	li	a0,0

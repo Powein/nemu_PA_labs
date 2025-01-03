@@ -100,7 +100,10 @@ static int decode_exec(Decode *s) {
   src1 is source register 1
   src2 is source register 2
   imm is immediate value*/
+  // i may did it correctly???
+
   // given U type instructions, no need to have more of them in rv32i
+  
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = s->pc + imm);
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(rd) = imm << 12);
 
@@ -160,26 +163,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("?????? ?????? ????? 111 ????? 11000 11", bgeu   , B, if (((word_t)src1) >= ((word_t)src2)) branch(s, src1, src2, ((sword_t)imm)););
   // my J series
   INSTPAT("?????? ?????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc; branch(s, src1, src2, ((sword_t)imm)););
-
-// 80000000 <_start>:
-// 80000000:	00000413          	li	s0,0
-// 80000004:	00009117          	auipc	sp,0x9
-// 80000008:	ffc10113          	addi	sp,sp,-4 # 80009000 <_end>
-// 8000000c:	00c000ef          	jal	80000018 <_trm_init> 
-
-// 80000010 <main>:
-// 80000010:	00000513          	li	a0,0
-// 80000014:	00008067          	ret
-//   80000018 <_trm_init>:
-// 80000018:	ff010113          	addi	sp,sp,-16
-// 8000001c:	00000517          	auipc	a0,0x0
-// 80000020:	01c50513          	addi	a0,a0,28 # 80000038 <_etext>
-// 80000024:	00112623          	sw	ra,12(sp)
-// 80000028:	fe9ff0ef          	jal	80000010 <main>
-// 8000002c:	00050513          	mv	a0,a0
-// 80000030:	00100073          	ebreak
-// 80000034:	0000006f          	j	80000034 <_trm_init+0x1c>
-  // INSTPAT("");
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();

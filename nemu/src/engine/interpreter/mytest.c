@@ -7,7 +7,7 @@ void mytest() {
     vaddr_write(0x80000000, 4, 0xDEADBEEF);
     vaddr_write(0x80000010, 2, 0xAAAABBBB);
     vaddr_write(0x80000020, 1, 0xCDCDEFEF);
-    vaddr_write(0x80000004, 1, 0xADCADCAD);
+    vaddr_write(0x80000004, 1, 0xBADDBEEF);
     word_t a = vaddr_ifetch(0x80000000, 1);
     Warn("mytest: 0x%08x\n", a);
 }

@@ -69,7 +69,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-
+  Log("Decoding pc = %x", s->pc);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
@@ -152,7 +152,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("?????? ?????? ????? 110 ????? 11000 11", bltu   , B, if (((word_t)src1) < ((word_t)src2)) s->dnpc = s->pc + (sword_t)imm;);
   INSTPAT("?????? ?????? ????? 111 ????? 11000 11", bgeu   , B, if (((word_t)src1) >= ((word_t)src2)) s->dnpc = s->pc + (sword_t)imm;);
   // my J series
-  INSTPAT("?????? ?????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc, s->dnpc = s->pc + (sword_t)imm -4;);
+  INSTPAT("?????? ?????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc, s->dnpc = s->pc + (sword_t)imm;);
 
 // 80000000 <_start>:
 // 80000000:	00000413          	li	s0,0

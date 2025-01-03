@@ -39,7 +39,7 @@ enum {
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 // my definitions for imm
 #define immB() do { *imm = (SEXT(BITS(i, 31, 31), 1)) << 10 | BITS(i, 7, 7) << 9 | BITS(i, 30, 25) << 4 | BITS(i, 11, 8); } while(0)
-#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) << 19 | BITS(i,19,12) << 11 | BITS(i,20,20) << 10 | BITS(i,30,21); } while(0)
+#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) << 19 | BITS(i,19,12) << 11 | BITS(i,20,20) << 10 | BITS(i,30,20); } while(0)
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
   // the rs field are fixed to these five bits

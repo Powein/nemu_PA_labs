@@ -31,7 +31,10 @@ enum {
 void align(word_t* x) {
   *x = (*x + 3) & ~3;
 }
-
+void branch(Decode* s, word_t src1, word_t src2, sword_t imm) {
+  s->dnpc = s->pc + (sword_t)imm * 2; 
+  Log("imm is %x", imm);
+}
 // set the immidate through macro definition
 // all the influence to the registers are done there
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -154,7 +157,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("?????? ?????? ????? 110 ????? 11000 11", bltu   , B, if (((word_t)src1) < ((word_t)src2)) s->dnpc = s->pc + (sword_t)imm;);
   INSTPAT("?????? ?????? ????? 111 ????? 11000 11", bgeu   , B, if (((word_t)src1) >= ((word_t)src2)) s->dnpc = s->pc + (sword_t)imm;);
   // my J series
-  INSTPAT("?????? ?????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc, s->dnpc = s->pc + (sword_t)imm * 2; Log("imm is %x", imm););
+  INSTPAT("?????? ?????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc; branch(s, src1, src2, ((sword_t)imm)););
 
 // 80000000 <_start>:
 // 80000000:	00000413          	li	s0,0
